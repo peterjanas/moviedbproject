@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 
 public class Personnel
 {
@@ -27,4 +26,12 @@ public class Personnel
     private Role role;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
+
+    public Personnel(String name, int roleID, Role role, Set<MoviePersonnel> moviePersonnel)
+    {
+        this.name = name;
+        this.roleID = roleID;
+        this.role = role;
+        this.moviePersonnel = moviePersonnel;
+    }
 }
