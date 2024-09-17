@@ -14,7 +14,7 @@ public class PersonnelDTO
 {
     private Long id;
     private String name;
-    private int roleID;
+    private Long roleId;
     private Role role;
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
 }
