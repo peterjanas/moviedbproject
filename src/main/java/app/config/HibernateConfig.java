@@ -1,6 +1,7 @@
 package app.config;
 
 import app.entity.Movie;
+import app.entity.MoviePersonnel;
 import app.entity.Personnel;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -37,6 +38,7 @@ public class HibernateConfig
     {
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(Personnel.class);
+        configuration.addAnnotatedClass(MoviePersonnel.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName)
