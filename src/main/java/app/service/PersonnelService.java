@@ -1,8 +1,8 @@
 package app.service;
 
-import app.dto.PersonnelDTO;
 import app.dto.CastMemberDTO;
 import app.dto.CrewMemberDTO;
+import app.dto.PersonnelDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -14,9 +14,11 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PersonnelService {
+public class PersonnelService
+{
 
-    public String getPersonnel(int movieId) throws IOException, InterruptedException, URISyntaxException {
+    public String getPersonnel(int movieId) throws IOException, InterruptedException, URISyntaxException
+    {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest
                 .newBuilder()
@@ -32,7 +34,8 @@ public class PersonnelService {
 
         // Print out details of each cast member
         StringBuilder output = new StringBuilder("Movie ID: " + personnel.getId() + "\nCast Members:\n");
-        for (CastMemberDTO castMember : personnel.getCast()) {
+        for (CastMemberDTO castMember : personnel.getCast())
+        {
             output.append("ID: ").append(castMember.getId())
                     .append(", Name: ").append(castMember.getName())
                     .append(", Gender: ").append(castMember.getGender())
@@ -46,7 +49,8 @@ public class PersonnelService {
                 .collect(Collectors.toList());
 
         output.append("\nDirectors:\n");
-        for (CrewMemberDTO director : directors) {
+        for (CrewMemberDTO director : directors)
+        {
             output.append("ID: ").append(director.getId())
                     .append(", Name: ").append(director.getName())
                     .append(", Gender: ").append(director.getGender())

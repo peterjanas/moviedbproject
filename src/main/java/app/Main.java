@@ -1,11 +1,14 @@
 package app;
 
 import app.config.HibernateConfig;
+import app.service.GenreService;
 import app.service.PersonnelService;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
+
 
 public class Main
 {
@@ -14,7 +17,16 @@ public class Main
 //        EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactory("moviedb");
 
         PersonnelService personnelService = new PersonnelService();
-        System.out.println(personnelService.getPersonnel(980026));
+//        System.out.println(personnelService.getPersonnel(533535));
+//        System.out.println(personnelService.getPersonnel(990691));
+
+
+        GenreService genreService = new GenreService();
+//        System.out.println(genreService.getGenres());
+
+//        genreService.getMoviesByGenre(28);
+
+
 
     }
 }
