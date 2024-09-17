@@ -15,16 +15,16 @@ public class MoviePersonnel
     @Column(name = "id", nullable = false)
     private Long id;
     private Long movieID;
-    private Long castMemberID;
+    private Long personnelID;
     @ManyToOne
     private Movie movie;
     @ManyToOne
     private Personnel personnel;
 
-    public MoviePersonnel(Long movieID, Long castMemberID, Movie movie, Personnel personnel)
+    public MoviePersonnel(Long movieID, Long personnelID, Movie movie, Personnel personnel)
     {
         this.movieID = movieID;
-        this.castMemberID = castMemberID;
+        this.personnelID = personnelID;
         this.movie = movie;
         this.personnel = personnel;
     }
