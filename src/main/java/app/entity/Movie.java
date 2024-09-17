@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -15,7 +16,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Builder
-
 public class Movie
 {
     @Id
