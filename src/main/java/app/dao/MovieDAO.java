@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 public class MovieDAO implements IDAO<Movie>
@@ -16,11 +17,19 @@ public class MovieDAO implements IDAO<Movie>
     private EntityManagerFactory emf;
 
     @Override
-    public Movie getById(Integer Id)
+    public Movie getById(Long Id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             return em.find(Movie.class, Id);
+        }
+    }
+
+    public Movie getByTitle(String title)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.find(Movie.class, title);
         }
     }
 
@@ -59,13 +68,33 @@ public class MovieDAO implements IDAO<Movie>
     }
 
     @Override
-    public void delete(Movie movie)
+    public void delete(Movie movieTitle)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.remove(movie);
+            em.remove(getById(movieTitle.getId()));
             em.getTransaction().commit();
         }
+
     }
+
+    public void deleteMovieTitle(String movieTitle, Long movieId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            Long verifyMovieId;
+            verifyMovieId = movieId;
+            if(!Objects.equals(verifyMovieId, movieId))
+            {
+                System.out.println("Movie ID does not match the movie title");
+            } else {
+                TypedQuery<Movie> query = em.createQuery("DELETE FROM Movie m WHERE m.title = :title", Movie.class);
+                query.setParameter("title", movieTitle);
+            }
+        }
+    }
+
+
 }

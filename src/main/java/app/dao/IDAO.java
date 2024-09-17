@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface IDAO<T>
 {
-    T getById(Integer Id);
+    T getById(Long Id);
     Set<T> getAll();
     void create(T t);
     void update(T t);

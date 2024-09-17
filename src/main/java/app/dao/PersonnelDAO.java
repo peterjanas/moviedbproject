@@ -1,11 +1,13 @@
 package app.dao;
 
+import app.entity.Movie;
 import app.entity.Personnel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,15 +21,13 @@ public class PersonnelDAO implements IDAO<Personnel>
     }
 
     @Override
-    public Personnel getById(Integer Id)
+    public Personnel getById(Long Id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             return em.find(Personnel.class, Id);
         }
     }
-
-
 
     @Override
     public Set<Personnel> getAll()
@@ -70,6 +70,23 @@ public class PersonnelDAO implements IDAO<Personnel>
             em.getTransaction().begin();
             em.remove(personnel);
             em.getTransaction().commit();
+        }
+    }
+
+    public void deletePersonnelName(String personnelName, Long personnelId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            Long verifyPersonnelId;
+            verifyPersonnelId = personnelId;
+            if(!Objects.equals(verifyPersonnelId, personnelId))
+            {
+                System.out.println("Movie ID does not match the movie title");
+            } else {
+                TypedQuery<Movie> query = em.createQuery("DELETE FROM Personnel m WHERE m.name = :name", Movie.class);
+                query.setParameter("name", personnelName);
+            }
         }
     }
 }
