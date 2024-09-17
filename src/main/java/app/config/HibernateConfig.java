@@ -1,7 +1,6 @@
 package app.config;
 
 import jakarta.persistence.EntityManagerFactory;
-import app.entity.Person;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;

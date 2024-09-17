@@ -1,5 +1,5 @@
 package app.service;
 
-public class test4
+public class MovieService
 {
 }

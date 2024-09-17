@@ -1,5 +1,5 @@
 package app.dao;
 
-public class test1
+public class MovieDAO
 {
 }

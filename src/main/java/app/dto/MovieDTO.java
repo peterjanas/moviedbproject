@@ -1,5 +1,5 @@
 package app.dto;
 
-public class test2
+public class MovieDTO
 {
 }
