@@ -1,5 +1,5 @@
 package app.entity;
 
-public class Director
+public class CastMember
 {
 }
