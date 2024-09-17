@@ -15,7 +15,7 @@ import lombok.Setter;
 public class MoviePersonnel
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     private Long movieID;
