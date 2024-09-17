@@ -24,7 +24,7 @@ public class Personnel
     private String name;
     private int roleID;
     private Role role;
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "personnel", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
 
     public Personnel(String name, int roleID, Role role, Set<MoviePersonnel> moviePersonnel)

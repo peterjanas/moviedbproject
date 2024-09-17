@@ -7,6 +7,6 @@ public class Main
 {
     public static void main(String[] args)
     {
-        EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactory("persons");
+        EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactory("moviedb");
     }
 }
