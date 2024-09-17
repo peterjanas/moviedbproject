@@ -15,7 +15,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 public class Movie
 {
     @Id
@@ -31,4 +30,15 @@ public class Movie
     private double rating;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
+
+    public Movie(String title, String overview, Set<String> genre, String originalLanguage, LocalDate releaseDate, double rating, Set<MoviePersonnel> moviePersonnel)
+    {
+        this.title = title;
+        this.overview = overview;
+        this.genre = genre;
+        this.originalLanguage = originalLanguage;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+        this.moviePersonnel = moviePersonnel;
+    }
 }

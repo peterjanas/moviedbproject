@@ -10,7 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 
 public class MoviePersonnel
 {
@@ -24,4 +23,12 @@ public class MoviePersonnel
     private Movie movie;
     @ManyToOne
     private Personnel personnel;
+
+    public MoviePersonnel(Long movieID, Long castMemberID, Movie movie, Personnel personnel)
+    {
+        this.movieID = movieID;
+        this.castMemberID = castMemberID;
+        this.movie = movie;
+        this.personnel = personnel;
+    }
 }
