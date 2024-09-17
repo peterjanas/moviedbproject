@@ -1,20 +1,23 @@
 package app.dto;
 
+import app.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PersonnelDTO {
+public class CastMemberDTO {
     @JsonProperty("id")
     private int id;
 
-    @JsonProperty("cast")
-    private List<CastMemberDTO> cast;  // List of cast members
+    @JsonProperty("name")
+    private String name;
 
-    @JsonProperty("crew")
-    private List<CrewMemberDTO> crew;  // List of crew members
+    @JsonProperty("gender")
+    private int gender;
+
+    @JsonProperty("known_for_department")
+    private String knownForDepartment;
+
 }
