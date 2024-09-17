@@ -24,7 +24,7 @@ public class Movie
     private String title;
     private String overview;
     @ElementCollection
-    private Set<String> genre = new HashSet<>();
+    private Set<String> genres = new HashSet<>();
     private String originalLanguage;
     private LocalDate releaseDate;
     private double rating;
@@ -35,7 +35,7 @@ public class Movie
     {
         this.title = title;
         this.overview = overview;
-        this.genre = genre;
+        this.genres = genre;
         this.originalLanguage = originalLanguage;
         this.releaseDate = releaseDate;
         this.rating = rating;
