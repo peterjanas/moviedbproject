@@ -96,7 +96,5 @@ public class MovieService
                 .sorted(Comparator.comparing(MovieDTO::getReleaseDate))
                 .map(MovieDTO::toString)
                 .collect(Collectors.joining("\n"));
-
-
     }
 }
