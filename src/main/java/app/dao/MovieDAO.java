@@ -7,14 +7,17 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 public class MovieDAO implements IDAO<Movie>
 {
 
     private EntityManagerFactory emf;
+
+    public MovieDAO(EntityManagerFactory emf)
+    {
+        this.emf = emf;
+    }
 
     @Override
     public Movie getById(Long Id)
@@ -96,5 +99,11 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
+    public double averageRating()
+    {
+        Set<Movie> movies = getAll();
 
+        return movies.stream().mapToDouble(Movie::getRating).average().orElse(0);
+
+    }
 }
