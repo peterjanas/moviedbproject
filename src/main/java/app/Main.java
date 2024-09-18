@@ -2,6 +2,7 @@ package app;
 
 import app.config.HibernateConfig;
 import app.service.GenreService;
+import app.service.MovieService;
 import app.service.PersonnelService;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -26,7 +27,8 @@ public class Main
 
 //        genreService.getMoviesByGenre(28);
 
-
+        MovieService movieService = new MovieService();
+//        movieService.getMovies(5);
 
     }
 }

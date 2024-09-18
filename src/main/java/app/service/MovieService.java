@@ -4,97 +4,48 @@ import app.dto.MovieDTO;
 import app.dto.MovieResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MovieService
 {
     private static final String API_KEY = System.getenv("api_key");
-    private static final String BASE_URL_MOVIE = "https://api.themoviedb.org/3/movie/";
-    private static final String  BASE_URL_DISCOVER = "https://api.themoviedb.org/3/discover/movie";
 
-
-    public static String getMovieById(int id) throws IOException, InterruptedException
+    public void getMovies(int pageNumber) throws IOException, InterruptedException, URISyntaxException
     {
-        String url = BASE_URL_MOVIE + id + "?api_key=" + API_KEY;
-
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
+        HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&with_original_language=da&primary_release_date.gte=2019-01-01" + "&primary_release_date.lte=2024-12-31&sort_by=popularity.desc&page=" + pageNumber)).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() == 200)
+        {
+            String json = response.body();
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            MovieResponseDTO movieResponse = objectMapper.readValue(json, MovieResponseDTO.class);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        String json = response.body();
-        MovieDTO movie = objectMapper.readValue(json, MovieDTO.class);
+            System.out.println("You are on page: " + movieResponse.getPage() + "\n" + "Total pages: " + movieResponse.getTotalPages() + "\n" + "Total results: " + movieResponse.getTotalResults() + "\n");
 
-        return movie.toString();
-    }
-
-    public static void getByRating(double rating1, double rating2) throws IOException, InterruptedException
-    {
-        String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY;
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        String json = response.body();
-
-        // Deserialize the response into the wrapper DTO
-        MovieResponseDTO movieResponse = objectMapper.readValue(json, MovieResponseDTO.class);
-
-        // Extract the list of movies from the wrapper DTO
-        List<MovieDTO> movies = movieResponse.getMovies();
-
-        // Filter and print movies within the specified rating range
-        for (MovieDTO movie : movies) {
-            double rating = movie.getRating(); // Assuming there is a getRating() method in MovieDTO
-            if (rating >= rating1 && rating <= rating2) {
-                System.out.println(movie);
+            StringBuilder output = new StringBuilder();
+            for (MovieDTO movie : movieResponse.getMovies())
+            {
+                output.append("Genres: ").append(movie.getGenres()).append("\n")
+                        .append("Title: ").append(movie.getTitle()).append("\n")
+                        .append("Overview: ").append(movie.getOverview()).append("\n")
+                        .append("Original Language: ").append(movie.getOriginalLanguage()).append("\n")
+                        .append("Release Date: ").append(movie.getReleaseDate()).append("\n")
+                        .append("Rating: ").append(movie.getRating()).append("\n");
+                output.append("\n");
             }
+
+            System.out.println(output);
+        } else
+        {
+            System.out.println("GET request failed. Status code: " + response.statusCode());
         }
-    }
-
-    public static String getSortedByReleaseDate(LocalDate releaseDate) throws IOException, InterruptedException
-    {
-        String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY;
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        String json = response.body();
-
-        MovieResponseDTO movieResponse = objectMapper.readValue(json, MovieResponseDTO.class);
-
-        List<MovieDTO> movies = movieResponse.getMovies();
-
-        return movies.stream()
-                .sorted(Comparator.comparing(MovieDTO::getReleaseDate))
-                .map(MovieDTO::toString)
-                .collect(Collectors.joining("\n"));
     }
 }
