@@ -151,8 +151,26 @@ public class MovieDAO implements IDAO<Movie>
     public double averageRating()
     {
         Set<Movie> movies = getAll();
+        return movies.stream()
+                .mapToDouble(Movie::getRating)
+                .average().orElse(0);
+    }
 
-        return movies.stream().mapToDouble(Movie::getRating).average().orElse(0);
+    public List<Movie> getTop10HighestRatedMovies()
+    {
+        Set<Movie> movies = getAll();
+        return movies.stream()
+                .sorted((movie1, movie2) -> Double.compare(movie2.getRating(), movie1.getRating()))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 
+    public List<Movie> getTop10LowestRatedMovies()
+    {
+        Set<Movie> movies = getAll();
+        return movies.stream()
+                .sorted((movie1, movie2) -> Double.compare(movie1.getRating(), movie2.getRating()))
+                .limit(10)
+                .collect(Collectors.toList());
     }
 }
