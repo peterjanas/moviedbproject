@@ -4,6 +4,7 @@ import app.config.HibernateConfig;
 import app.dao.MovieDAO;
 import app.entity.Movie;
 import app.service.GenreService;
+import app.service.MovieService;
 import app.service.PersonnelService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -49,7 +50,8 @@ public class Main
 
       System.out.println(movieDAO.averageRating());
 
-
+        MovieService movieService = new MovieService();
+//        movieService.getMovies(5);
 
     }
 }

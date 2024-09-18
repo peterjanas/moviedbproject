@@ -12,6 +12,8 @@ public class MovieResponseDTO
     private int page;
     @JsonProperty("results")
     private List<MovieDTO> movies;
+    @JsonProperty("total_results")
     private int totalResults;
+    @JsonProperty("total_pages")
     private int totalPages;
 }
