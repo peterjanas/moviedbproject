@@ -38,9 +38,6 @@ public class Main
 
 
 
-      // Masih test
-      MovieDAO movieDAO = new MovieDAO(emf);
-      System.out.println(movieDAO.getTop10LowestRatedMovies());
 
 
 
