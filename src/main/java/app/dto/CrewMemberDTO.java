@@ -1,5 +1,6 @@
 package app.dto;
 
+import app.enums.Gender;
 import app.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,4 +23,8 @@ public class CrewMemberDTO {
 
     @JsonProperty("job")
     private String job;
+
+    public String getGenderDescription() {
+        return Gender.getDescriptionById(gender);
+    }
 }

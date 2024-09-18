@@ -1,20 +1,16 @@
 package app.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+
 public class Movie
 {
     @Id
@@ -40,5 +36,12 @@ public class Movie
         this.releaseDate = releaseDate;
         this.rating = rating;
         this.moviePersonnel = moviePersonnel;
+    }
+
+    public Movie(String title, String overview, double rating)
+    {
+        this.title = title;
+        this.overview = overview;
+        this.rating = rating;
     }
 }

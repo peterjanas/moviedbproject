@@ -1,6 +1,6 @@
 package app.dto;
 
-import app.enums.Role;
+import app.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -19,5 +19,9 @@ public class CastMemberDTO {
 
     @JsonProperty("known_for_department")
     private String knownForDepartment;
+
+    public String getGenderDescription() {
+        return Gender.getDescriptionById(gender);
+    }
 
 }
