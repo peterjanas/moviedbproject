@@ -45,5 +45,14 @@ public enum Genre {
         }
         throw new IllegalArgumentException("Invalid Genre ID: " + id);
     }
+
+    public static String getNameById(int id) {
+        for (Genre genre : values()) {
+            if (genre.getId() == id) {
+                return genre.getName();
+            }
+        }
+        return "Unknown Genre";
+    }
 }
 

@@ -2,6 +2,7 @@ package app.service;
 
 import app.dto.MovieDTO;
 import app.dto.MovieResponseDTO;
+import app.enums.Genre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -11,6 +12,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MovieService
 {
@@ -33,7 +36,11 @@ public class MovieService
             StringBuilder output = new StringBuilder();
             for (MovieDTO movie : movieResponse.getMovies())
             {
-                output.append("Genres: ").append(movie.getGenres()).append("\n")
+                Set<String> genreNames = movie.getGenres().stream()
+                        .map(Genre::getNameById)
+                        .collect(Collectors.toSet());
+
+                output.append("Genres: ").append(genreNames).append("\n")
                         .append("Title: ").append(movie.getTitle()).append("\n")
                         .append("Overview: ").append(movie.getOverview()).append("\n")
                         .append("Original Language: ").append(movie.getOriginalLanguage()).append("\n")
