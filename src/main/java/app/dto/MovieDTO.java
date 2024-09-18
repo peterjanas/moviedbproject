@@ -22,10 +22,10 @@ public class MovieDTO
     private String overview;
 
     @JsonProperty("genre_ids")
-    private Set<Integer> genreIds = new HashSet<>(); // Explicit mapping to JSON "genre_ids"
+    private Set<Integer> genreIds = new HashSet<>();
 
     @JsonIgnore // This tells Jackson to ignore this field during serialization and deserialization
-    private Set<String> genres = new HashSet<>(); // Local usage, not directly tied to JSON
+    private Set<String> genres = new HashSet<>();
 
     @JsonProperty("original_language")
     private String originalLanguage;

@@ -18,10 +18,11 @@ import java.util.Set;
 public class Movie
 {
     @Id
-
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(length = 1000)
     private String title;
+    @Column(length = 1000)
     private String overview;
     @ElementCollection
     private Set<String> genres = new HashSet<>();
