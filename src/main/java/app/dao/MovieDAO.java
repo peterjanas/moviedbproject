@@ -173,4 +173,13 @@ public class MovieDAO implements IDAO<Movie>
                 .limit(10)
                 .collect(Collectors.toList());
     }
+
+    public List<Movie> getTop10PopularMovies()
+    {
+        Set<Movie> movies = getAll();
+        return movies.stream()
+                .sorted((movie1, movie2) -> Double.compare(movie2.getPopularity(), movie1.getPopularity()))
+                .limit(10)
+                .collect(Collectors.toList());
+    }
 }
