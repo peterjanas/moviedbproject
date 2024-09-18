@@ -1,5 +1,8 @@
 package app.dao;
 
+import app.entity.Movie;
+import app.entity.Personnel;
+
 import java.util.Set;
 
 public interface IDAO<T>
