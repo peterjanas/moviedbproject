@@ -1,9 +1,11 @@
 package app.dao;
 
 
+import app.dto.MovieDTO;
 import app.entity.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
@@ -200,6 +202,23 @@ public class MovieDAO implements IDAO<Movie>
             return movies.stream()
                     .map(Movie::toString)
                     .collect(Collectors.joining("\n"));
+        }
+    }
+
+    public void saveMoviesToDb(List<MovieDTO> movieDTOList) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            for (MovieDTO movieDTO : movieDTOList) {
+                Movie movie = new Movie();
+                movie.setTitle(movieDTO.getTitle());
+                movie.setOverview(movieDTO.getOverview());
+                movie.setReleaseDate(movieDTO.getReleaseDate());
+                movie.setRating(movieDTO.getRating());
+                movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
+                movie.setPopularity(movieDTO.getPopularity());
+                em.persist(movie);
+            }
+            em.getTransaction().commit();
         }
     }
 }

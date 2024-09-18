@@ -1,17 +1,10 @@
 package app;
 
 import app.config.HibernateConfig;
-import app.dao.MovieDAO;
-import app.entity.Movie;
-import app.service.GenreService;
-import app.service.MovieService;
-import app.service.PersonnelService;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
 
 
 public class Main
@@ -58,6 +51,7 @@ public class Main
 
       MovieService movieService = new MovieService();
 //        movieService.getMovies(5);
+
 
 
     }
