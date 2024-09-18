@@ -38,7 +38,7 @@ public class PersonnelService
         {
             output.append("ID: ").append(castMember.getId())
                     .append(", Name: ").append(castMember.getName())
-                    .append(", Gender: ").append(castMember.getGender())
+                    .append(", Gender: ").append(castMember.getGenderDescription())
                     .append(", Department: ").append(castMember.getKnownForDepartment())
                     .append("\n");
         }
@@ -53,8 +53,9 @@ public class PersonnelService
         {
             output.append("ID: ").append(director.getId())
                     .append(", Name: ").append(director.getName())
-                    .append(", Gender: ").append(director.getGender())
+                    .append(", Gender: ").append(director.getGenderDescription())
                     .append(", Department: ").append(director.getKnownForDepartment())
+                    .append(", job: ").append(director.getJob())
                     .append("\n");
         }
 
