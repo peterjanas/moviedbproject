@@ -45,7 +45,7 @@ public class PersonnelService
 
         // Filter crew members to only include directors and print their details
         List<CrewMemberDTO> directors = personnel.getCrew().stream()
-                .filter(crewMember -> "Directing".equals(crewMember.getKnownForDepartment()))
+                .filter(crewMember -> "Director".equals(crewMember.getJob()))
                 .collect(Collectors.toList());
 
         output.append("\nDirectors:\n");

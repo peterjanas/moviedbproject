@@ -19,4 +19,7 @@ public class CrewMemberDTO {
 
     @JsonProperty("gender")
     private int gender;
+
+    @JsonProperty("job")
+    private String job;
 }
