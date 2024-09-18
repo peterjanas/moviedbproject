@@ -18,6 +18,7 @@ public class Main
 {
     public static void main(String[] args) throws IOException, URISyntaxException, InterruptedException
     {
+
       EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("moviedb");
 
 
@@ -57,6 +58,7 @@ public class Main
 
       MovieService movieService = new MovieService();
 //        movieService.getMovies(5);
+
 
     }
 }
