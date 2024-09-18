@@ -5,16 +5,23 @@ import app.entity.Movie;
 import app.entity.Personnel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 public class MovieDAO implements IDAO<Movie>
 {
 
     private EntityManagerFactory emf;
+
+    public MovieDAO(EntityManagerFactory emf)
+    {
+        this.emf = emf;
+    }
 
     @Override
     public Movie getById(Long Id)
@@ -56,6 +63,28 @@ public class MovieDAO implements IDAO<Movie>
 
     }
 
+    public void saveAll(List<Movie> movies) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            for (Movie movie : movies) {
+                if (movie.getId() == null) {  // Assuming getId() checks the primary key
+                    em.persist(movie);
+                } else {
+                    em.merge(movie);  // Handles both cases: detached entities and entities needing updating
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Failed to save movies", e);
+        } finally {
+            em.close();
+        }
+    }
+
     @Override
     public void update(Movie movie)
     {
@@ -86,10 +115,11 @@ public class MovieDAO implements IDAO<Movie>
             em.getTransaction().begin();
             Long verifyMovieId;
             verifyMovieId = movieId;
-            if(!Objects.equals(verifyMovieId, movieId))
+            if (!Objects.equals(verifyMovieId, movieId))
             {
                 System.out.println("Movie ID does not match the movie title");
-            } else {
+            } else
+            {
                 TypedQuery<Movie> query = em.createQuery("DELETE FROM Movie m WHERE m.title = :title", Movie.class);
                 query.setParameter("title", movieTitle);
             }

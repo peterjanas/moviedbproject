@@ -18,7 +18,7 @@ import java.util.Set;
 public class Movie
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id", nullable = false)
     private Long id;
     private String title;
@@ -26,6 +26,7 @@ public class Movie
     @ElementCollection
     private Set<String> genres = new HashSet<>();
     private String originalLanguage;
+    private double popularity;
     private LocalDate releaseDate;
     private double rating;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
@@ -49,6 +50,18 @@ public class Movie
         this.overview = overview;
         this.genres = genres;
         this.originalLanguage = originalLanguage;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+    }
+
+    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, double popularity, LocalDate releaseDate, double rating)
+    {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.genres = genres;
+        this.originalLanguage = originalLanguage;
+        this.popularity = popularity;
         this.releaseDate = releaseDate;
         this.rating = rating;
     }
