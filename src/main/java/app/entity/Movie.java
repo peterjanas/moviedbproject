@@ -44,4 +44,16 @@ public class Movie
         this.overview = overview;
         this.rating = rating;
     }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", overview='" + overview + '\'' +
+                ", originalLanguage='" + originalLanguage + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", rating=" + rating +
+                '}';
+    }
 }
