@@ -41,4 +41,15 @@ public class Movie
         this.rating = rating;
         this.moviePersonnel = moviePersonnel;
     }
+
+    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, LocalDate releaseDate, double rating)
+    {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.genres = genres;
+        this.originalLanguage = originalLanguage;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+    }
 }
