@@ -54,22 +54,60 @@ public class PersonnelDAO implements IDAO<Personnel>
     @Override
     public void update(Personnel personnel)
     {
-        try (EntityManager em = emf.createEntityManager())
-        {
-            em.getTransaction().begin();
-            em.merge(personnel);
-            em.getTransaction().commit();
-        }
+
     }
 
     @Override
     public void delete(Personnel personnel)
     {
+
+    }
+
+    public void updatePerson(String personnelName, Long personnelId)
+    {
         try (EntityManager em = emf.createEntityManager())
         {
-            em.getTransaction().begin();
-            em.remove(personnel);
-            em.getTransaction().commit();
+            // Get movie where id is the same as the paramater id
+            TypedQuery<Personnel> verifyIdQuery = em.createQuery("SELECT p FROM Personnel p WHERE p.id = :id", Personnel.class);
+            verifyIdQuery.setParameter("id", personnelId);
+
+            // String that verifies the title of the movie
+            String verifyMovieTitle = verifyIdQuery.getSingleResult().getName();
+            // Long that verifies the id of the movie
+            Long verifyMovieId = verifyIdQuery.getSingleResult().getId();
+
+            if (Objects.equals(verifyMovieId, personnelId) && Objects.equals(verifyMovieTitle, personnelName))
+            {
+                TypedQuery<Personnel> deleteTitleQuery = em.createQuery("UPDATE FROM Personnel p SET p.name = :name", Personnel.class);
+                deleteTitleQuery.setParameter("name", personnelName);
+            } else
+            {
+                System.out.println("Personnel ID does not match the name of the person");
+            }
+        }
+    }
+
+    public void deletePerson(String personnelName, Long personnelId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            // Get movie where id is the same as the paramater id
+            TypedQuery<Personnel> verifyIdQuery = em.createQuery("SELECT p FROM Personnel p WHERE p.id = :id", Personnel.class);
+            verifyIdQuery.setParameter("id", personnelId);
+
+            // String that verifies the title of the movie
+            String verifyMovieTitle = verifyIdQuery.getSingleResult().getName();
+            // Long that verifies the id of the movie
+            Long verifyMovieId = verifyIdQuery.getSingleResult().getId();
+
+            if (Objects.equals(verifyMovieId, personnelId) && Objects.equals(verifyMovieTitle, personnelName))
+            {
+                TypedQuery<Personnel> deleteTitleQuery = em.createQuery("Delete FROM Personnel p WHERE p.id = :id", Personnel.class);
+                deleteTitleQuery.setParameter("id", personnelId);
+            } else
+            {
+                System.out.println("Personnel ID does not match the name of the person");
+            }
         }
     }
 
@@ -78,15 +116,26 @@ public class PersonnelDAO implements IDAO<Personnel>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            Long verifyPersonnelId;
-            verifyPersonnelId = personnelId;
-            if(!Objects.equals(verifyPersonnelId, personnelId))
+
+            // Get person where id is the same as the paramater id
+            TypedQuery<Personnel> verifyIdQuery = em.createQuery("SELECT p FROM Personnel p WHERE p.id = :id", Personnel.class);
+            verifyIdQuery.setParameter("id", personnelId);
+
+            // String that verifies the name of the person
+            String verifyPersonnelName = verifyIdQuery.getSingleResult().getName();
+            // Long that verifies the id of the person
+            Long verifyPersonnelId = verifyIdQuery.getSingleResult().getId();
+
+            // If the id and name from the parameter matches the database, delete the persons name
+            if (Objects.equals(verifyPersonnelId, personnelId) && Objects.equals(verifyPersonnelName, personnelName))
             {
-                System.out.println("Movie ID does not match the movie title");
-            } else {
-                TypedQuery<Movie> query = em.createQuery("DELETE FROM Personnel m WHERE m.name = :name", Movie.class);
-                query.setParameter("name", personnelName);
+                TypedQuery<Personnel> deletePersonnelquery = em.createQuery("UPDATE Personnel p SET p.name = NULL WHERE p.id = :id", Personnel.class);
+                deletePersonnelquery.setParameter("id", personnelId);
+            } else
+            {
+                System.out.println("Personnel ID does not match the name of the person");
             }
         }
     }
 }
+
