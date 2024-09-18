@@ -23,5 +23,6 @@ public class MovieDTO
     private String originalLanguage;
     @JsonProperty("release_date")
     private LocalDate releaseDate;
+    @JsonProperty("vote_average")
     private double rating;
 }
