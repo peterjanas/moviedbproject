@@ -85,18 +85,6 @@ public class PersonnelDAO implements IDAO<Personnel>
         }
     }
 
-    @Override
-    public void update(Personnel personnel)
-    {
-
-    }
-
-    @Override
-    public void delete(Personnel personnel)
-    {
-
-    }
-
     public void updatePerson(Long personnelId, String newName)
     {
         try (EntityManager em = emf.createEntityManager())

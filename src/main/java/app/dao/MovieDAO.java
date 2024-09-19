@@ -10,6 +10,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -93,22 +94,8 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    @Override
-    public void update(Movie movie)
-    {
-
-    }
-
-    @Override
-    public void delete(Movie movie)
-    {
-
-    }
-
-    public void updateMovie(Long movieId, String newTitle, Double newRating)
-    {
-        try (EntityManager em = emf.createEntityManager())
-        {
+    public void updateMovie(Long movieId, String newTitle, Double newRating, LocalDate newReleaseDate) {
+        try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             // Get movie where id is the same as the parameter id
@@ -119,16 +106,15 @@ public class MovieDAO implements IDAO<Movie>
             Movie movie = verifyIdQuery.getSingleResult();
 
             // If the movie exists, update the attributes
-            if (movie != null)
-            {
-                Query updateQuery = em.createQuery("UPDATE Movie m SET m.title = :title, m.rating = :rating WHERE m.id = :id");
+            if (movie != null) {
+                Query updateQuery = em.createQuery("UPDATE Movie m SET m.title = :title, m.rating = :rating, m.releaseDate = :releaseDate WHERE m.id = :id");
                 updateQuery.setParameter("title", newTitle);
                 updateQuery.setParameter("rating", newRating);
+                updateQuery.setParameter("releaseDate", newReleaseDate);
                 updateQuery.setParameter("id", movieId);
                 updateQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else
-            {
+            } else {
                 System.out.println("Movie not found");
                 em.getTransaction().rollback();
             }
@@ -195,6 +181,36 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
+    public void deleteMovieReleaseDate(String movieTitle, Long movieId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+
+            // Get movie where id is the same as the parameter id
+            TypedQuery<Movie> verifyIdQuery = em.createQuery("SELECT m FROM Movie m WHERE m.id = :id", Movie.class);
+            verifyIdQuery.setParameter("id", movieId);
+
+            // String that verifies the title of the movie
+            String verifyMovieTitle = verifyIdQuery.getSingleResult().getTitle();
+            // Long that verifies the id of the movie
+            Long verifyMovieId = verifyIdQuery.getSingleResult().getId();
+
+            // If the id and title from the parameter matches the database, delete the movie title
+            if (Objects.equals(verifyMovieId, movieId) && Objects.equals(verifyMovieTitle, movieTitle))
+            {
+                Query deleteReleaseYearQuery = em.createQuery("UPDATE Movie m SET m.releaseDate = NULL WHERE m.id = :id");
+                deleteReleaseYearQuery.setParameter("id", movieId);
+                deleteReleaseYearQuery.executeUpdate();
+                em.getTransaction().commit();
+            } else
+            {
+                System.out.println("Movie ID does not match the title of the Movie");
+                em.getTransaction().rollback();
+            }
+        }
+    }
+
     public double averageRating()
     {
         Set<Movie> movies = getAll();
@@ -230,7 +246,7 @@ public class MovieDAO implements IDAO<Movie>
                 .collect(Collectors.toList());
     }
 
-    public String getMovieByTitle(String title)
+    public List<Movie> getMovieByTitle(String title)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -240,9 +256,7 @@ public class MovieDAO implements IDAO<Movie>
             );
             query.setParameter("title", title);
             List<Movie> movies = query.getResultList();
-            return movies.stream()
-                    .map(Movie::toString)
-                    .collect(Collectors.joining("\n"));
+            return query.getResultList();
         }
     }
 

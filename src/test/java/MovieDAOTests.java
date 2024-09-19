@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -77,7 +78,7 @@ public class MovieDAOTests {
         Movie movie = movieDAO.getById(1L);
 
         // Update the movie
-        movieDAO.updateMovie(movie.getId(), "Inception 2", 1.0);
+        movieDAO.updateMovie(movie.getId(), "Inception 2", 1.0, LocalDate.of(2021, 9, 9));
 
         // Retrieve the updated movie and verify the changes
         Movie updatedMovie = movieDAO.getById(1L);
@@ -85,6 +86,7 @@ public class MovieDAOTests {
         assertEquals("Inception 2", updatedMovie.getTitle());
         assertEquals("A mind-bending thriller", updatedMovie.getOverview());
         assertEquals(1.0, updatedMovie.getRating());
+        assertEquals(2010, updatedMovie.getReleaseDate());
     }
 
     @Test
@@ -173,12 +175,10 @@ public class MovieDAOTests {
     public void testGetMovieByTitle()
     {
         // Retrieve movie by title
-        String retrievedMovie = movieDAO.getMovieByTitle("The Dark ");
+        List<Movie> retrievedMovies = movieDAO.getMovieByTitle("The Dark ");
 
         // Assert the result
-        assertNotNull(retrievedMovie);
-        assertTrue(retrievedMovie.contains("The Dark Knight"));
-        assertTrue(retrievedMovie.contains("A dark superhero movie"));
-        assertTrue(retrievedMovie.contains("9.0"));
+        assertNotNull(retrievedMovies);
+        assertTrue(retrievedMovies.stream().anyMatch(movie -> "The Dark Knight".equals(movie.getTitle())));
     }
 }
