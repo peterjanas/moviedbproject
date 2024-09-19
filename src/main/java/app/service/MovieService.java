@@ -50,15 +50,14 @@ public class MovieService
     {
         LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
         int page = 1;
-        int totalPages = 1; // Initially set to 1, will be updated from API response
+        int totalPages = 1; // set to 1, will be updated from API response
 
         HttpClient client = HttpClient.newHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        while (page <= totalPages)
-        {
+        do {
             String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY + "&with_original_language=da&primary_release_date.gte=" + fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() + "&sort_by=popularity.desc&page=" + page;
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -70,26 +69,31 @@ public class MovieService
             MovieResponseDTO movieResponse = objectMapper.readValue(response.body(), MovieResponseDTO.class);
             totalPages = movieResponse.getTotalPages();
 
-            List<Movie> moviesToSave = movieResponse.getMovies().stream().map(dto ->
-            {
-                Movie movie = new Movie();
-                movie.setId(dto.getId());
-                movie.setTitle(dto.getTitle());
-                movie.setOverview(dto.getOverview());
-                movie.setOriginalLanguage(dto.getOriginalLanguage());
-                movie.setReleaseDate(dto.getReleaseDate());
-                movie.setPopularity(dto.getPopularity());
-                movie.setRating(dto.getRating());
-                Set<String> genreNames = dto.getGenreIds().stream()
-                        .map(id -> genreMap.getOrDefault(id, "Unknown Genre"))
-                        .collect(Collectors.toSet());
-                movie.setGenres(genreNames);
-                return movie;
-            }).collect(Collectors.toList());
-
+            List<Movie> moviesToSave = convertToMovies(movieResponse);
             movieDAO.saveAll(moviesToSave);
+
             page++;
-        }
+        } while (page <= totalPages);
+    }
+
+    private List<Movie> convertToMovies(MovieResponseDTO movieResponse)
+    {
+        return movieResponse.getMovies().stream().map(dto ->
+        {
+            Movie movie = new Movie();
+            movie.setId(dto.getId());
+            movie.setTitle(dto.getTitle());
+            movie.setOverview(dto.getOverview());
+            movie.setOriginalLanguage(dto.getOriginalLanguage());
+            movie.setReleaseDate(dto.getReleaseDate());
+            movie.setRating(dto.getRating());
+            movie.setPopularity(dto.getPopularity());
+            Set<String> genreNames = dto.getGenreIds().stream()
+                    .map(id -> genreMap.getOrDefault(id, "Unknown Genre"))
+                    .collect(Collectors.toSet());
+            movie.setGenres(genreNames);
+            return movie;
+        }).collect(Collectors.toList());
     }
 
     public void fetchGenreMappings() throws IOException, InterruptedException

@@ -67,11 +67,12 @@ public class MovieDAO implements IDAO<Movie>
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            int count = 0;
             for (Movie movie : movies) {
-                if (movie.getId() == null) {  // Assuming getId() checks the primary key
-                    em.persist(movie);
-                } else {
-                    em.merge(movie);  // Handles both cases: detached entities and entities needing updating
+                em.persist(movie);
+                if (++count % 20 == 0) { // Flush and clear in batches of 20
+                    em.flush();
+                    em.clear();
                 }
             }
             em.getTransaction().commit();

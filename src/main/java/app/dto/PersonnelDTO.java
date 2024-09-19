@@ -10,11 +10,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonnelDTO {
     @JsonProperty("id")
-    private int id;
-
-    @JsonProperty("cast")
-    private List<CastMemberDTO> cast;  // List of cast members
-
-    @JsonProperty("crew")
-    private List<CrewMemberDTO> crew;  // List of crew members
+    private Long id;
+    @JsonProperty("name")
+    private String name;
+    private String roleType;  // "cast" or "crew"
 }
