@@ -1,8 +1,7 @@
 package app.service;
 
 import app.dao.PersonnelDAO;
-import app.dto.CastMemberDTO;
-import app.dto.CrewMemberDTO;
+
 import app.dto.PersonnelDTO;
 import app.entity.Movie;
 import app.entity.Personnel;

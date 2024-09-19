@@ -21,27 +21,35 @@ public class PersonnelDAO implements IDAO<Personnel>
         this.emf = emf;
     }
 
-    public void savePersonnel(List<Personnel> personnelList) {
+    public void savePersonnel(List<Personnel> personnelList)
+    {
         EntityManager em = emf.createEntityManager();
-        try {
+        try
+        {
             em.getTransaction().begin();
-            for (Personnel personnel : personnelList) {
+            for (Personnel personnel : personnelList)
+            {
                 Personnel existingPersonnel = em.find(Personnel.class, personnel.getId());
-                if (existingPersonnel == null) {
+                if (existingPersonnel == null)
+                {
                     em.persist(personnel);
-                } else {
+                } else
+                {
                     existingPersonnel.setName(personnel.getName());
                     existingPersonnel.setRoleType(personnel.getRoleType());
                     em.merge(existingPersonnel);
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
+        } catch (Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
                 em.getTransaction().rollback();
             }
             throw new RuntimeException("Transaction failed: " + e.getMessage(), e);
-        } finally {
+        } finally
+        {
             em.close();
         }
     }
@@ -89,8 +97,10 @@ public class PersonnelDAO implements IDAO<Personnel>
 
     }
 
-    public void updatePerson(Long personnelId, String newName) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void updatePerson(Long personnelId, String newName)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get personnel where id is the same as the parameter id
@@ -101,21 +111,25 @@ public class PersonnelDAO implements IDAO<Personnel>
             Personnel personnel = verifyIdQuery.getSingleResult();
 
             // If the personnel exists, update the name
-            if (personnel != null) {
+            if (personnel != null)
+            {
                 Query updateQuery = em.createQuery("UPDATE Personnel p SET p.name = :name WHERE p.id = :id");
                 updateQuery.setParameter("name", newName);
                 updateQuery.setParameter("id", personnelId);
                 updateQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Personnel not found");
                 em.getTransaction().rollback();
             }
         }
     }
 
-    public void deletePerson(Long personnelId) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void deletePerson(Long personnelId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get personnel where id is the same as the parameter id
@@ -126,20 +140,24 @@ public class PersonnelDAO implements IDAO<Personnel>
             Personnel personnel = verifyIdQuery.getSingleResult();
 
             // If the personnel exists, delete the personnel
-            if (personnel != null) {
+            if (personnel != null)
+            {
                 Query deleteQuery = em.createQuery("DELETE FROM Personnel p WHERE p.id = :id");
                 deleteQuery.setParameter("id", personnelId);
                 deleteQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Personnel not found");
                 em.getTransaction().rollback();
             }
         }
     }
 
-    public void deletePersonnelName(Long personnelId) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void deletePersonnelName(Long personnelId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get personnel where id is the same as the parameter id
@@ -150,12 +168,14 @@ public class PersonnelDAO implements IDAO<Personnel>
             Personnel personnel = verifyIdQuery.getSingleResult();
 
             // If the personnel exists, set the name to NULL
-            if (personnel != null) {
+            if (personnel != null)
+            {
                 Query deleteNameQuery = em.createQuery("UPDATE Personnel p SET p.name = NULL WHERE p.id = :id");
                 deleteNameQuery.setParameter("id", personnelId);
                 deleteNameQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Personnel not found");
                 em.getTransaction().rollback();
             }

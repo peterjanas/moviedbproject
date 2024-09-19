@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PersonnelDTO {
+public class PersonnelDTO
+{
     @JsonProperty("id")
     private Long id;
     @JsonProperty("name")

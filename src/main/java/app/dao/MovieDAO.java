@@ -63,25 +63,32 @@ public class MovieDAO implements IDAO<Movie>
 
     }
 
-    public void saveAll(List<Movie> movies) {
+    public void saveAll(List<Movie> movies)
+    {
         EntityManager em = emf.createEntityManager();
-        try {
+        try
+        {
             em.getTransaction().begin();
             int count = 0;
-            for (Movie movie : movies) {
+            for (Movie movie : movies)
+            {
                 em.persist(movie);
-                if (++count % 20 == 0) { // Flush and clear in batches of 20
+                if (++count % 20 == 0)
+                { // Flush and clear in batches of 20
                     em.flush();
                     em.clear();
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
+        } catch (Exception e)
+        {
+            if (em.getTransaction().isActive())
+            {
                 em.getTransaction().rollback();
             }
             throw new RuntimeException("Failed to save movies", e);
-        } finally {
+        } finally
+        {
             em.close();
         }
     }
@@ -98,8 +105,10 @@ public class MovieDAO implements IDAO<Movie>
 
     }
 
-    public void updateMovie(Long movieId, String newTitle, Double newRating) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void updateMovie(Long movieId, String newTitle, Double newRating)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get movie where id is the same as the parameter id
@@ -110,22 +119,26 @@ public class MovieDAO implements IDAO<Movie>
             Movie movie = verifyIdQuery.getSingleResult();
 
             // If the movie exists, update the attributes
-            if (movie != null) {
+            if (movie != null)
+            {
                 Query updateQuery = em.createQuery("UPDATE Movie m SET m.title = :title, m.rating = :rating WHERE m.id = :id");
                 updateQuery.setParameter("title", newTitle);
                 updateQuery.setParameter("rating", newRating);
                 updateQuery.setParameter("id", movieId);
                 updateQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Movie not found");
                 em.getTransaction().rollback();
             }
         }
     }
 
-    public void deleteMovie(String movieTitle, Long movieId) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void deleteMovie(String movieTitle, Long movieId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get movie where id is the same as the parameter id
@@ -138,12 +151,14 @@ public class MovieDAO implements IDAO<Movie>
             Long verifyMovieId = verifyIdQuery.getSingleResult().getId();
 
             // If the id and title from the parameter matches the database, delete the movie
-            if (Objects.equals(verifyMovieId, movieId) && Objects.equals(verifyMovieTitle, movieTitle)) {
+            if (Objects.equals(verifyMovieId, movieId) && Objects.equals(verifyMovieTitle, movieTitle))
+            {
                 Query deleteTitleQuery = em.createQuery("DELETE FROM Movie m WHERE m.id = :id");
                 deleteTitleQuery.setParameter("id", movieId);
                 deleteTitleQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Movie ID does not match the title of the Movie");
                 em.getTransaction().rollback();
             }
@@ -215,8 +230,10 @@ public class MovieDAO implements IDAO<Movie>
                 .collect(Collectors.toList());
     }
 
-    public String getMovieByTitle(String title) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public String getMovieByTitle(String title)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             TypedQuery<Movie> query = em.createQuery(
                     "SELECT m FROM Movie m LEFT JOIN FETCH m.genres WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
                     Movie.class
@@ -229,10 +246,13 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public void saveMoviesToDb(List<MovieDTO> movieDTOList) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void saveMoviesToDb(List<MovieDTO> movieDTOList)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
-            for (MovieDTO movieDTO : movieDTOList) {
+            for (MovieDTO movieDTO : movieDTOList)
+            {
                 Movie movie = new Movie();
                 movie.setTitle(movieDTO.getTitle());
                 movie.setOverview(movieDTO.getOverview());

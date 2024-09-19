@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,9 +21,6 @@ public class MovieDTO
     @JsonProperty("id")
     private Long id;
 
-
-    @JsonProperty("genre_ids")
-    private Set<Integer> genres;
     @JsonProperty("original_title")
     private String title;
 
@@ -47,5 +44,6 @@ public class MovieDTO
 
     @JsonProperty("vote_average")
     private double rating;
+
 
 }
