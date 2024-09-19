@@ -1,5 +1,8 @@
 package app;
 
+import app.service.MovieService;
+import app.service.PersonnelService;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -41,16 +44,8 @@ public class Main
 //
 
 
-
-
-
-
-
-
-//      MovieService movieService = new MovieService();
-////        movieService.getMovies(5);
-
-
+        PersonnelService personnelService = new PersonnelService();
+        System.out.println(personnelService.getPersonnel(646097));
 
 
     }
