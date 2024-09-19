@@ -25,10 +25,10 @@ public class Main
 //        System.out.println(personnelService.getPersonnel(646097));
 
 //Movie Test
-        MovieService movieService = new MovieService();
-        movieService.getAllMoviesAndTheirPersonnel();
-        MovieDAO movieDAO = new MovieDAO(emf);
-        List<MovieDTO> movieList = movieService.getAllMoviesForDatabase();
-        movieDAO.saveMoviesToDb(movieList);
+//        MovieService movieService = new MovieService();
+//        movieService.getAllMoviesAndTheirPersonnel();
+//        MovieDAO movieDAO = new MovieDAO(emf);
+//        List<MovieDTO> movieList = movieService.getAllMoviesForDatabase();
+//        movieDAO.saveMoviesToDb(movieList);
     }
 }
