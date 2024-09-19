@@ -3,13 +3,14 @@ package app;
 import app.config.HibernateConfig;
 import app.dao.MovieDAO;
 import app.dao.PersonnelDAO;
+import app.entity.Personnel;
 import app.service.MovieService;
 import app.service.PersonnelService;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-
+import java.util.List;
 
 
 public class Main
@@ -19,16 +20,18 @@ public class Main
         EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactory("moviedb");
         MovieDAO movieDAO = new MovieDAO(entityManagerFactory);
         PersonnelDAO personnelDAO = new PersonnelDAO(entityManagerFactory);
-        MovieService movieService = new MovieService(movieDAO);
         PersonnelService personnelService = new PersonnelService(personnelDAO);
+        MovieService movieService = new MovieService(movieDAO, personnelService);
 
 
-//        System.out.println(personnelService.getPersonnel(533535));
-//        System.out.println(personnelService.getPersonnel(990691));
+        //movieService.fetchAndSaveAllMoviesAndPersonnel();// method for fill movies and cast/crew
 
 
-        movieService.fetchAndSaveDanishMovies(); // method for fill movies
-        personnelService.fetchAndSaveCastAndCrew(833339L);
+
+
+
+        //movieDAO.printActorsInMovie(1085218L); // test til at find actors i en film
+
 
 
 

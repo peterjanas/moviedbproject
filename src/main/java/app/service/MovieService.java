@@ -27,41 +27,44 @@ public class MovieService
     private static final String BASE_URL_DISCOVER = "https://api.themoviedb.org/3/discover/movie";
     private final MovieDAO movieDAO;
     private Map<Integer, String> genreMap = new HashMap<>();
+    private PersonnelService personnelService;
 
 
-    public MovieService(MovieDAO movieDAO) throws IOException, InterruptedException
+    public MovieService(MovieDAO movieDAO, PersonnelService personnelService) throws IOException, InterruptedException
     {
         this.movieDAO = movieDAO;
-
+        this.personnelService = personnelService;
     }
 
-    public void fetchAndSaveDanishMovies() throws IOException, InterruptedException
-    {
-        fetchGenreMappings();
+    public void fetchAndSaveAllMoviesAndPersonnel() throws IOException, InterruptedException {
         LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
         int page = 1;
-        int totalPages = 1; // set to 1, will be updated from API response
+        int totalPages;
 
         HttpClient client = HttpClient.newHttpClient();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         do {
-            String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY + "&with_origin_country=DK&primary_release_date.gte=" + fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() + "&sort_by=popularity.desc&page=" + page;
+            String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY +
+                    "&with_origin_country=DK&primary_release_date.gte=" +
+                    fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() +
+                    "&sort_by=popularity.desc&page=" + page;
 
-            HttpRequest request = HttpRequest.newBuilder()
+            HttpResponse<String> response = client.send(HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                    .build(), HttpResponse.BodyHandlers.ofString());
             MovieResponseDTO movieResponse = objectMapper.readValue(response.body(), MovieResponseDTO.class);
+            List<Movie> movies = convertToMovies(movieResponse);
+            movieDAO.saveAll(movies);
+
+            // Fetch and save personnel for each movie
+            for (Movie movie : movies) {
+                personnelService.fetchAndSaveCastAndCrew(movie.getId());
+            }
+
             totalPages = movieResponse.getTotalPages();
-
-            List<Movie> moviesToSave = convertToMovies(movieResponse);
-            movieDAO.saveAll(moviesToSave);
-
             page++;
         } while (page <= totalPages);
     }
@@ -84,27 +87,6 @@ public class MovieService
             movie.setGenres(genreNames);
             return movie;
         }).collect(Collectors.toList());
-    }
-
-    public void fetchGenreMappings() throws IOException, InterruptedException
-    {
-        String url = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY + "&language=en-US";
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode root = objectMapper.readTree(response.body());
-        JsonNode genres = root.path("genres");
-        for (JsonNode genre : genres)
-        {
-            int id = genre.path("id").asInt();
-            String name = genre.path("name").asText();
-            genreMap.put(id, name);
-        }
     }
 }
 
