@@ -21,6 +21,31 @@ public class PersonnelDAO implements IDAO<Personnel>
         this.emf = emf;
     }
 
+    public void savePersonnel(List<Personnel> personnelList) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            for (Personnel personnel : personnelList) {
+                Personnel existingPersonnel = em.find(Personnel.class, personnel.getId());
+                if (existingPersonnel == null) {
+                    em.persist(personnel);
+                } else {
+                    existingPersonnel.setName(personnel.getName());
+                    existingPersonnel.setRoleType(personnel.getRoleType());
+                    em.merge(existingPersonnel);
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Transaction failed: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
+
     @Override
     public Personnel getById(Long Id)
     {

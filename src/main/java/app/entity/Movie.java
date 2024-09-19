@@ -14,18 +14,18 @@ import java.util.Set;
 public class Movie
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+    @Column(length = 1000)
     private String title;
-    @Column(length = 1000) // Increase the length to accommodate longer overviews
+    @Column(length = 1000)
     private String overview;
     @ElementCollection
     private Set<String> genres;
     private String originalLanguage;
+    private double popularity;
     private LocalDate releaseDate;
     private double rating;
-    private double popularity;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
 
@@ -39,6 +39,29 @@ public class Movie
         this.rating = rating;
         this.popularity = popularity;
         this.moviePersonnel = moviePersonnel;
+    }
+
+    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, LocalDate releaseDate, double rating)
+    {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.genres = genres;
+        this.originalLanguage = originalLanguage;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
+    }
+
+    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, double popularity, LocalDate releaseDate, double rating)
+    {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.genres = genres;
+        this.originalLanguage = originalLanguage;
+        this.popularity = popularity;
+        this.releaseDate = releaseDate;
+        this.rating = rating;
     }
 
     public Movie(String title, String overview, double rating)

@@ -18,20 +18,16 @@ import java.util.Set;
 public class Personnel
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     private String name;
-    private Long roleId;
-    private Role role;
+    private String roleType;
     @OneToMany(mappedBy = "personnel", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
 
-    public Personnel(String name, Long roleId, Role role, Set<MoviePersonnel> moviePersonnel)
+    public Personnel(String name, String roleType)
     {
         this.name = name;
-        this.roleId = roleId;
-        this.role = role;
-        this.moviePersonnel = moviePersonnel;
+        this.roleType = roleType;
     }
 }

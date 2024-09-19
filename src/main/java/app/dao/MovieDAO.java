@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 import java.util.*;
@@ -60,6 +61,29 @@ public class MovieDAO implements IDAO<Movie>
             em.getTransaction().commit();
         }
 
+    }
+
+    public void saveAll(List<Movie> movies) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            int count = 0;
+            for (Movie movie : movies) {
+                em.persist(movie);
+                if (++count % 20 == 0) { // Flush and clear in batches of 20
+                    em.flush();
+                    em.clear();
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Failed to save movies", e);
+        } finally {
+            em.close();
+        }
     }
 
     @Override
