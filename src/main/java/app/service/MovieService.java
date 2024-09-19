@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dao.MovieDAO;
 import app.dto.MovieDTO;
 import app.dto.MovieResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,70 @@ public class MovieService
     private static final String API_KEY = System.getenv("api_key");
 
     private List<MovieDTO> movieList = new ArrayList<>();
+
+    public void getAllMoviesAndTheirPersonnel() throws IOException, InterruptedException, URISyntaxException
+    {
+        HttpClient client = HttpClient.newHttpClient();
+        int currentPage = 1;
+        int totalPages;
+
+        do
+        {
+            // Send request for the current page
+            HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&with_original_language=da&primary_release_date.gte=2019-01-01" + "&primary_release_date.lte=2024-12-31&sort_by=popularity.desc&page=" + currentPage)).GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200)
+            {
+                String json = response.body();
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.registerModule(new JavaTimeModule());
+                MovieResponseDTO movieResponse = objectMapper.readValue(json, MovieResponseDTO.class);
+
+                // Add fetched movies to the list
+                for (MovieDTO movie : movieResponse.getMovies())
+                {
+                    movieList.add(movie);
+                }
+
+                // Print page details
+                System.out.println("You are on page: " + movieResponse.getPage() + "\n" + "Total pages: " + movieResponse.getTotalPages() + "\n" + "Total results: " + movieResponse.getTotalResults() + "\n");
+
+                PersonnelService personnelService = new PersonnelService();
+
+                // Print movies
+                StringBuilder output = new StringBuilder();
+                for (MovieDTO movie : movieResponse.getMovies())
+                {
+                    output
+                            .append("Id: ").append(movie.getId()).append("\n")
+                            .append("Genres: ").append(movie.getGenres()).append("\n")
+                            .append("Title: ").append(movie.getTitle()).append("\n")
+                            .append("Overview: ").append(movie.getOverview()).append("\n")
+                            .append("Original Language: ").append(movie.getOriginalLanguage()).append("\n")
+                            .append("Release Date: ").append(movie.getReleaseDate()).append("\n")
+                            .append("Rating: ").append(movie.getRating()).append("\n")
+                            .append("Popularity: ").append(movie.getPopularity()).append("\n")
+                            .append("\n")
+                            .append("Personnel for ").append(personnelService.getPersonnel(movie.getId())).append("\n")
+                    ;
+                    output.append("\n");
+                }
+
+                System.out.println(output);
+
+                // Move to the next page
+                totalPages = movieResponse.getTotalPages();
+                currentPage++;
+            } else
+            {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+                break;
+            }
+        } while (currentPage <= totalPages);
+        // Print the size of the movie list
+        System.out.println("Total movies fetched: " + movieList.size());
+    }
 
     public List<MovieDTO> getAllMoviesForDatabase() throws IOException, InterruptedException, URISyntaxException
     {
