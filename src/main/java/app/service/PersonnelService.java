@@ -1,8 +1,6 @@
 package app.service;
-
-import app.dto.CastMemberDTO;
-import app.dto.CrewMemberDTO;
 import app.dto.PersonnelDTO;
+import app.dto.PersonnelDTOResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -30,32 +28,32 @@ public class PersonnelService
         String json = response.body();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        PersonnelDTO personnel = objectMapper.readValue(json, PersonnelDTO.class);
+        PersonnelDTOResponse personnel = objectMapper.readValue(json, PersonnelDTOResponse.class);
 
         // Print out details of each cast member
         StringBuilder output = new StringBuilder("Movie ID: " + personnel.getId() + "\nCast Members:\n");
-        for (CastMemberDTO castMember : personnel.getCast())
+        for (PersonnelDTO personnelDTO : personnel.getCast())
         {
-            output.append("ID: ").append(castMember.getId())
-                    .append(", Name: ").append(castMember.getName())
-                    .append(", Gender: ").append(castMember.getGenderDescription())
-                    .append(", Department: ").append(castMember.getKnownForDepartment())
+            output.append("ID: ").append(personnelDTO.getId())
+                    .append(", Name: ").append(personnelDTO.getName())
+                    .append(", Gender: ").append(personnelDTO.getGenderDescription())
+                    .append(", Department: ").append(personnelDTO.getKnownForDepartment())
                     .append("\n");
         }
 
         // Filter crew members to only include directors and print their details
-        List<CrewMemberDTO> directors = personnel.getCrew().stream()
+        List<PersonnelDTO> directors = personnel.getCrew().stream()
                 .filter(crewMember -> "Director".equals(crewMember.getJob()))
                 .collect(Collectors.toList());
 
         output.append("\nDirectors:\n");
-        for (CrewMemberDTO director : directors)
+        for (PersonnelDTO director : directors)
         {
             output.append("ID: ").append(director.getId())
                     .append(", Name: ").append(director.getName())
                     .append(", Gender: ").append(director.getGenderDescription())
                     .append(", Department: ").append(director.getKnownForDepartment())
-                    .append(", job: ").append(director.getJob())
+                    .append(", Job: ").append(director.getJob())
                     .append("\n");
         }
 
