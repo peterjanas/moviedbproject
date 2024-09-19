@@ -1,8 +1,6 @@
 package app.config;
 
-import app.entity.Movie;
-import app.entity.MoviePersonnel;
-import app.entity.Personnel;
+import app.entity.*;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -39,6 +37,7 @@ public class HibernateConfig
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(Personnel.class);
         configuration.addAnnotatedClass(MoviePersonnel.class);
+        configuration.addAnnotatedClass(Genre.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName)
@@ -85,7 +84,7 @@ public class HibernateConfig
     {
         // props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", "update");
+        props.put("hibernate.hbm2ddl.auto", "create"); //Vi skal lige ændre til update igen
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "true");
         props.put("hibernate.format_sql", "true");

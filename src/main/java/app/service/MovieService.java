@@ -78,10 +78,7 @@ public class MovieService
             movie.setReleaseDate(dto.getReleaseDate());
             movie.setRating(dto.getRating());
             movie.setPopularity(dto.getPopularity());
-            Set<String> genreNames = dto.getGenreIds().stream()
-                    .map(id -> genreMap.getOrDefault(id, "Unknown Genre"))
-                    .collect(Collectors.toSet());
-            movie.setGenres(genreNames);
+            movie.setGenreIds(dto.getGenreIds());
             return movie;
         }).collect(Collectors.toList());
     }

@@ -2,6 +2,7 @@ package app.dao;
 
 
 import app.dto.MovieDTO;
+import app.entity.Genre;
 import app.entity.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -72,6 +73,14 @@ public class MovieDAO implements IDAO<Movie>
             int count = 0;
             for (Movie movie : movies)
             {
+                movie.getGenreIds().forEach(genreId ->
+                {
+                    Genre genre = em.find(Genre.class, genreId);
+                    if (genre != null)
+                    {
+                        movie.addGenre(genre);
+                    }
+                });
                 em.persist(movie);
                 if (++count % 20 == 0)
                 { // Flush and clear in batches of 20
@@ -230,12 +239,14 @@ public class MovieDAO implements IDAO<Movie>
                 .collect(Collectors.toList());
     }
 
+
+    //TODO vi skal fixe dette her med "genre
     public String getMovieByTitle(String title)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             TypedQuery<Movie> query = em.createQuery(
-                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genres WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
+                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genre WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
                     Movie.class
             );
             query.setParameter("title", title);
