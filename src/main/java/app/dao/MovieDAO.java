@@ -3,6 +3,7 @@ package app.dao;
 
 import app.dto.MovieDTO;
 import app.entity.Movie;
+import app.entity.Personnel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -243,6 +244,33 @@ public class MovieDAO implements IDAO<Movie>
             return movies.stream()
                     .map(Movie::toString)
                     .collect(Collectors.joining("\n"));
+        }
+    }
+
+    public List<Personnel> findActorsByMovieId(Long movieId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT mp.personnel FROM MoviePersonnel mp WHERE mp.movie.id = :movieId AND mp.personnel.roleType = 'cast'", Personnel.class)
+                    .setParameter("movieId", movieId)
+                    .getResultList();
+        }
+    }
+
+    public void printActorsInMovie(Long movieId) {
+        List<Personnel> actors = findActorsByMovieId(movieId);
+        System.out.println("Actors in Movie ID " + movieId + ":");
+        for (Personnel actor : actors) {
+            System.out.println("Actor ID: " + actor.getId() + ", Name: " + actor.getName());
+        }
+        if (actors.isEmpty()) {
+            System.out.println("No actors found for Movie ID " + movieId);
+        }
+    }
+
+    public List<Movie> findMoviesByActorId(Long actorId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery("SELECT mp.movie FROM MoviePersonnel mp WHERE mp.personnel.id = :actorId AND mp.personnel.roleType = 'cast'", Movie.class)
+                    .setParameter("actorId", actorId)
+                    .getResultList();
         }
     }
 
