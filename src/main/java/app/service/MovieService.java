@@ -88,26 +88,5 @@ public class MovieService
             return movie;
         }).collect(Collectors.toList());
     }
-
-    public void fetchGenreMappings() throws IOException, InterruptedException
-    {
-        String url = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY + "&language=en-US";
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
-
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode root = objectMapper.readTree(response.body());
-        JsonNode genres = root.path("genres");
-        for (JsonNode genre : genres)
-        {
-            int id = genre.path("id").asInt();
-            String name = genre.path("name").asText();
-            genreMap.put(id, name);
-        }
-    }
 }
 
