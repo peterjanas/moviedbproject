@@ -24,8 +24,9 @@ public class Main
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("moviedb");
         MovieDAO movieDAO = new MovieDAO(emf);
         PersonnelDAO personnelDAO = new PersonnelDAO(emf);
-        MovieService movieService = new MovieService(movieDAO);
         PersonnelService personnelService = new PersonnelService(personnelDAO);
+        MovieService movieService = new MovieService(movieDAO, personnelService);
+
 //
 //
 //        System.out.println(personnelService.getPersonnel(533535));
@@ -38,8 +39,8 @@ public class Main
         List<GenreDTO> genreDTOList = genreService.getGenresToDB();
         genreDAO.saveGenresToDB(genreDTOList);
 
-        movieService.fetchAndSaveDanishMovies(); // method for fill movies
-        personnelService.fetchAndSaveCastAndCrew(833339L);
+        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies
+//        personnelService.fetchAndSaveCastAndCrew(833339L);
 
 
 //        System.out.println(genreService.getGenres());
