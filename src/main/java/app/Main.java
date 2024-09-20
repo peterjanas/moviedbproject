@@ -26,12 +26,8 @@ public class Main
         PersonnelDAO personnelDAO = new PersonnelDAO(emf);
         MovieService movieService = new MovieService(movieDAO);
         PersonnelService personnelService = new PersonnelService(personnelDAO);
-//
-//
-//        System.out.println(personnelService.getPersonnel(533535));
-//        System.out.println(personnelService.getPersonnel(990691));
-//
-//
+        MovieService movieService = new MovieService(movieDAO, personnelService);
+
 
         GenreDAO genreDAO = new GenreDAO(emf);
         GenreService genreService = new GenreService();
@@ -40,6 +36,13 @@ public class Main
 
         movieService.fetchAndSaveDanishMovies(); // method for fill movies
         personnelService.fetchAndSaveCastAndCrew(833339L);
+
+
+
+
+
+        //movieDAO.printMoviesByActor(2361843L);
+        //movieDAO.printActorsInMovie(833339L);
 
 
 //        System.out.println(genreService.getGenres());

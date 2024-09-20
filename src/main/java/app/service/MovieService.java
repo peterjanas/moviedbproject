@@ -4,6 +4,7 @@ import app.dao.MovieDAO;
 import app.dto.MovieResponseDTO;
 import app.dto.MovieDTO;
 import app.entity.Movie;
+import app.service.PersonnelService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,4 +87,3 @@ public class MovieService
         }).collect(Collectors.toList());
     }
 }
-

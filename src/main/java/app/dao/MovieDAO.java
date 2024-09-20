@@ -12,6 +12,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class MovieDAO implements IDAO<Movie>
 {
 
     private EntityManagerFactory emf;
+
 
     public MovieDAO(EntityManagerFactory emf)
     {
@@ -104,8 +106,10 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public void updateMovie(Long movieId, String newTitle, Double newRating, LocalDate newReleaseDate) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void updateMovie(Long movieId, String newTitle, Double newRating, LocalDate newReleaseDate)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get movie where id is the same as the parameter id
@@ -116,7 +120,8 @@ public class MovieDAO implements IDAO<Movie>
             Movie movie = verifyIdQuery.getSingleResult();
 
             // If the movie exists, update the attributes
-            if (movie != null) {
+            if (movie != null)
+            {
                 Query updateQuery = em.createQuery("UPDATE Movie m SET m.title = :title, m.rating = :rating, m.releaseDate = :releaseDate WHERE m.id = :id");
                 updateQuery.setParameter("title", newTitle);
                 updateQuery.setParameter("rating", newRating);
@@ -124,7 +129,8 @@ public class MovieDAO implements IDAO<Movie>
                 updateQuery.setParameter("id", movieId);
                 updateQuery.executeUpdate();
                 em.getTransaction().commit();
-            } else {
+            } else
+            {
                 System.out.println("Movie not found");
                 em.getTransaction().rollback();
             }
@@ -272,32 +278,54 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public List<Personnel> findActorsByMovieId(Long movieId) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public List<Movie> findMoviesByActorId(Long actorId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT mp.movie FROM MoviePersonnel mp WHERE mp.personnel.id = :actorId AND mp.personnel.roleType = 'cast'", Movie.class)
+                    .setParameter("actorId", actorId)
+                    .getResultList();
+        }
+    }
+
+    public void printMoviesByActor(Long actorId)
+    {
+        List<Movie> movies = findMoviesByActorId(actorId);
+        System.out.println("Movies featuring Actor ID " + actorId + ":");
+        for (Movie movie : movies)
+        {
+            System.out.println("Movie ID: " + movie.getId() + ", Title: " + movie.getTitle());
+        }
+        if (movies.isEmpty())
+        {
+            System.out.println("No movies found featuring Actor ID " + actorId);
+        }
+    }
+
+    public List<Personnel> findActorsByMovieId(Long movieId)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             return em.createQuery("SELECT mp.personnel FROM MoviePersonnel mp WHERE mp.movie.id = :movieId AND mp.personnel.roleType = 'cast'", Personnel.class)
                     .setParameter("movieId", movieId)
                     .getResultList();
         }
     }
 
-    public void printActorsInMovie(Long movieId) {
+    public void printActorsInMovie(Long movieId)
+    {
         List<Personnel> actors = findActorsByMovieId(movieId);
         System.out.println("Actors in Movie ID " + movieId + ":");
-        for (Personnel actor : actors) {
+        for (Personnel actor : actors)
+        {
             System.out.println("Actor ID: " + actor.getId() + ", Name: " + actor.getName());
         }
-        if (actors.isEmpty()) {
+        if (actors.isEmpty())
+        {
             System.out.println("No actors found for Movie ID " + movieId);
         }
     }
 
-    public List<Movie> findMoviesByActorId(Long actorId) {
-        try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT mp.movie FROM MoviePersonnel mp WHERE mp.personnel.id = :actorId AND mp.personnel.roleType = 'cast'", Movie.class)
-                    .setParameter("actorId", actorId)
-                    .getResultList();
-        }
-    }
 
     public void saveMoviesToDb(List<MovieDTO> movieDTOList)
     {
