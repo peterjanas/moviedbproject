@@ -4,17 +4,13 @@ import app.config.HibernateConfig;
 import app.dao.GenreDAO;
 import app.dao.MovieDAO;
 import app.dao.PersonnelDAO;
-import app.dto.GenreDTO;
-import app.entity.Movie;
 import app.service.GenreService;
-import app.entity.Personnel;
 import app.service.MovieService;
 import app.service.PersonnelService;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 
 public class Main
@@ -29,16 +25,19 @@ public class Main
         GenreDAO genreDAO = new GenreDAO(emf);
         GenreService genreService = new GenreService();
 
-        List<GenreDTO> genreDTOList = genreService.getGenresToDB();
+//        List<GenreDTO> genreDTOList = genreService.getGenresToDB();
 
-        genreDAO.saveGenresToDB(genreDTOList);
+//        genreDAO.saveGenresToDB(genreDTOList);
 
-        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
+//        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
 
+//        genreDAO.getGenres().forEach(System.out::println); // method to print all genres in the database.
 
-        //movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
-        //movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
+//        genreDAO.printMoviesByAGenre(10402L);// method to print all movies in a genre.
 
-        //System.out.println(genreService.getGenres());
+//        movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
+//        movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
+
+//        System.out.println(genreService.getGenres());
     }
 }
