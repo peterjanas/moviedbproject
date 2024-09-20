@@ -278,7 +278,7 @@ public class MovieDAO implements IDAO<Movie>
         try (EntityManager em = emf.createEntityManager())
         {
             TypedQuery<Movie> query = em.createQuery(
-                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genres WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
+                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genreList WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
                     Movie.class
             );
             query.setParameter("title", title);
