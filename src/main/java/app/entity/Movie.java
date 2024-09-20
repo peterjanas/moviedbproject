@@ -82,6 +82,13 @@ public class Movie
         this.rating = rating;
     }
 
+    public Movie(Long id, String title, String overview, double rating) {
+        this.id = id;
+        this.title = title;
+        this.overview = overview;
+        this.rating = rating;
+    }
+
     @Override
     public String toString()
     {

@@ -3,10 +3,7 @@ import app.dao.*;
 import app.entity.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,9 +28,9 @@ public class MovieDAOTests {
 
         try(EntityManager em = emf.createEntityManager()) {
             // Create and persist some movies movie
-            Movie movie = new Movie("Inception", "A mind-bending thriller", 8.8);
-            Movie movie2 = new Movie("The Dark Knight", "A dark superhero movie", 9.0);
-            Movie movie3 = new Movie("Interstellar", "A space odyssey", 8.6);
+            Movie movie = new Movie(1L,"Inception", "A mind-bending thriller", 8.8);
+            Movie movie2 = new Movie(2L,"The Dark Knight", "A dark superhero movie", 9.0);
+            Movie movie3 = new Movie(3L,"Interstellar", "A space odyssey", 8.6);
 
             movieDAO.create(movie);
             movieDAO.create(movie2);
@@ -86,7 +83,7 @@ public class MovieDAOTests {
         assertEquals("Inception 2", updatedMovie.getTitle());
         assertEquals("A mind-bending thriller", updatedMovie.getOverview());
         assertEquals(1.0, updatedMovie.getRating());
-        assertEquals(2010, updatedMovie.getReleaseDate());
+        assertEquals(LocalDate.of(2021,9,9), updatedMovie.getReleaseDate());
     }
 
     @Test
@@ -141,15 +138,15 @@ public class MovieDAOTests {
     public void testTop10HighestRatedMovies()
     {
         // Add more movies
-        Movie movie4 = new Movie("The Shawshank Redemption", "Prison drama", 9.3);
-        Movie movie5 = new Movie("The Godfather", "Mafia drama", 9.2);
-        Movie movie6 = new Movie("Goodfellas", "Mafia drama", 2);
-        Movie movie7 = new Movie("The Dark Knight Rises", "Superhero movie", 8.4);
-        Movie movie8 = new Movie("The Matrix", "Sci-fi action", 3);
-        Movie movie9 = new Movie("The Lord of the Rings: The Return of the King", "Fantasy adventure", 8.9);
-        Movie movie10 = new Movie("The Lord of the Rings: The Fellowship of the Ring", "Fantasy adventure", 8.8);
-        Movie movie11 = new Movie("The Lord of the Rings: The Two Towers", "Fantasy adventure", 8.7);
-        Movie movie12 = new Movie("The Godfather: Part II", "Mafia drama", 9.0);
+        Movie movie4 = new Movie(4L,"The Shawshank Redemption", "Prison drama", 9.3);
+        Movie movie5 = new Movie(5L,"The Godfather", "Mafia drama", 9.2);
+        Movie movie6 = new Movie(6L,"Goodfellas", "Mafia drama", 2);
+        Movie movie7 = new Movie(7L,"The Dark Knight Rises", "Superhero movie", 8.4);
+        Movie movie8 = new Movie(8L,"The Matrix", "Sci-fi action", 3);
+        Movie movie9 = new Movie(9L,"The Lord of the Rings: The Return of the King", "Fantasy adventure", 8.9);
+        Movie movie10 = new Movie(10L,"The Lord of the Rings: The Fellowship of the Ring", "Fantasy adventure", 8.8);
+        Movie movie11 = new Movie(11L,"The Lord of the Rings: The Two Towers", "Fantasy adventure", 8.7);
+        Movie movie12 = new Movie(12L,"The Godfather: Part II", "Mafia drama", 9.0);
 
         movieDAO.create(movie4);
         movieDAO.create(movie5);
