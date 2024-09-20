@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,7 +30,7 @@ public class MovieDTO
     private String overview;
 
     @JsonProperty("genre_ids")
-    private Set<Integer> genreIds = new HashSet<>();
+    private List<Integer> genreIds = new ArrayList<>();
 
     @JsonIgnore // This tells Jackson to ignore this field during serialization and deserialization
     private Set<String> genres = new HashSet<>();

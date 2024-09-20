@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,8 +22,7 @@ public class Movie
     private String title;
     @Column(length = 1000)
     private String overview;
-    @ElementCollection
-    private Set<String> genres;
+
     private String originalLanguage;
     private double popularity;
     private LocalDate releaseDate;
@@ -29,11 +30,23 @@ public class Movie
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
     private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
 
-    public Movie(String title, String overview, Set<String> genre, String originalLanguage, LocalDate releaseDate, double rating, double popularity  ,Set<MoviePersonnel> moviePersonnel)
+    @ManyToMany(mappedBy = "movieList", cascade = CascadeType.PERSIST)
+    private Set<Genre> genreList = new HashSet<>();
+
+    @Transient
+    List<Integer> genreIds = new ArrayList<>();
+
+    public void addGenre(Genre genre)
+    {
+        genreList.add(genre);
+        genre.getMovieList().add(this);
+    }
+
+
+    public Movie(String title, String overview, String originalLanguage, LocalDate releaseDate, double rating, double popularity  ,Set<MoviePersonnel> moviePersonnel)
     {
         this.title = title;
         this.overview = overview;
-        this.genres = genre;
         this.originalLanguage = originalLanguage;
         this.releaseDate = releaseDate;
         this.rating = rating;
@@ -41,23 +54,21 @@ public class Movie
         this.moviePersonnel = moviePersonnel;
     }
 
-    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, LocalDate releaseDate, double rating)
+    public Movie(Long id, String title, String overview, String originalLanguage, LocalDate releaseDate, double rating)
     {
         this.id = id;
         this.title = title;
         this.overview = overview;
-        this.genres = genres;
         this.originalLanguage = originalLanguage;
         this.releaseDate = releaseDate;
         this.rating = rating;
     }
 
-    public Movie(Long id, String title, String overview, Set<String> genres, String originalLanguage, double popularity, LocalDate releaseDate, double rating)
+    public Movie(Long id, String title, String overview, String originalLanguage, double popularity, LocalDate releaseDate, double rating)
     {
         this.id = id;
         this.title = title;
         this.overview = overview;
-        this.genres = genres;
         this.originalLanguage = originalLanguage;
         this.popularity = popularity;
         this.releaseDate = releaseDate;
