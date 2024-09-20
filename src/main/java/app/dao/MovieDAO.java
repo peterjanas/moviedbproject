@@ -12,6 +12,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -241,13 +242,22 @@ public class MovieDAO implements IDAO<Movie>
     }
 
     public List<Movie> getTop10LowestRatedMovies()
+{
+    Set<Movie> movies = getAll();
+    Iterator<Movie> iterator = movies.iterator();
+    while (iterator.hasNext())
     {
-        Set<Movie> movies = getAll();
-        return movies.stream()
-                .sorted((movie1, movie2) -> Double.compare(movie1.getRating(), movie2.getRating()))
-                .limit(10)
-                .collect(Collectors.toList());
+        Movie m = iterator.next();
+        if (m.getRating() == 0.0)
+        {
+            iterator.remove();
+        }
     }
+    return movies.stream()
+            .sorted((movie1, movie2) -> Double.compare(movie1.getRating(), movie2.getRating()))
+            .limit(10)
+            .collect(Collectors.toList());
+}
 
     public List<Movie> getTop10PopularMovies()
     {
