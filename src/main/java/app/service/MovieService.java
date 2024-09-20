@@ -2,11 +2,9 @@ package app.service;
 
 import app.dao.MovieDAO;
 import app.dto.MovieResponseDTO;
-import app.dto.MovieDTO;
 import app.entity.Movie;
 import app.service.PersonnelService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -19,7 +17,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MovieService
@@ -37,7 +34,8 @@ public class MovieService
         this.personnelService = personnelService;
     }
 
-    public void fetchAndSaveAllMoviesAndPersonnel() throws IOException, InterruptedException {
+    public void fetchAndSaveAllMoviesAndPersonnel() throws IOException, InterruptedException
+    {
         LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
         int page = 1;
         int totalPages;
@@ -46,7 +44,8 @@ public class MovieService
         ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-        do {
+        do
+        {
             String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY +
                     "&with_origin_country=DK&primary_release_date.gte=" +
                     fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() +
@@ -61,7 +60,8 @@ public class MovieService
             movieDAO.saveAll(movies);
 
             // Fetch and save personnel for each movie
-            for (Movie movie : movies) {
+            for (Movie movie : movies)
+            {
                 personnelService.fetchAndSaveCastAndCrew(movie.getId());
             }
 
