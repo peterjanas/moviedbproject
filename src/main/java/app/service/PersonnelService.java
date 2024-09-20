@@ -4,7 +4,6 @@ import app.dao.PersonnelDAO;
 
 import app.dto.PersonnelDTO;
 import app.entity.Movie;
-import app.entity.MoviePersonnel;
 import app.entity.Personnel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
