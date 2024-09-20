@@ -75,8 +75,20 @@ public class MovieDAO implements IDAO<Movie>
         {
             em.getTransaction().begin();
             int count = 0;
+
+
             for (Movie movie : movies)
             {
+
+               movie.getPersonnelList().forEach(personnel ->
+                {
+                    Personnel p = em.find(Personnel.class, personnel.getId());
+                    if (p != null)
+                    {
+                        movie.addPersonnel(p);
+                    }
+                });
+
                 movie.getGenreIds().forEach(genreId ->
                 {
                     Genre genre = em.find(Genre.class, genreId);
@@ -272,22 +284,22 @@ public class MovieDAO implements IDAO<Movie>
     }
 
 
-    //TODO vi skal fixe dette her med "genre
-    public List<Movie> getMovieByTitle(String title)
-    {
-        try (EntityManager em = emf.createEntityManager())
-        {
-            TypedQuery<Movie> query = em.createQuery(
-                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genres WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
-                    Movie.class
-            );
-            query.setParameter("title", title);
-            List<Movie> movies = query.getResultList();
-            return query.getResultList();
-        }
-    }
+//    //TODO vi skal fixe dette her med "genre
+//    public List<Movie> getMovieByTitle(String title)
+//    {
+//        try (EntityManager em = emf.createEntityManager())
+//        {
+//            TypedQuery<Movie> query = em.createQuery(
+//                    "SELECT m FROM Movie m LEFT JOIN FETCH m.genres WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))",
+//                    Movie.class
+//            );
+//            query.setParameter("title", title);
+//            List<Movie> movies = query.getResultList();
+//            return query.getResultList();
+//        }
+//    }
 
-    public List<Personnel> findActorsByMovieId(Long movieId)
+    /* public List<Personnel> findActorsByMovieId(Long movieId)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -333,5 +345,5 @@ public class MovieDAO implements IDAO<Movie>
         {
             System.out.println("No movies found featuring Actor ID " + actorId);
         }
-    }
+    } */
 }

@@ -23,8 +23,8 @@ public class Personnel
     private String name;
     private String roleType;
 
-    @OneToMany(mappedBy = "personnel", cascade = CascadeType.PERSIST)
-    private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
+    @ManyToMany
+    private Set<Movie> movieList = new HashSet<>();
 
     public Personnel(String name, String roleType)
     {

@@ -1,7 +1,6 @@
 package app.dao;
 
 import app.entity.Movie;
-import app.entity.MoviePersonnel;
 import app.entity.Personnel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -184,8 +183,8 @@ public class PersonnelDAO implements IDAO<Personnel>
                 Personnel managedPersonnel = em.merge(personnel);
 
                 // Create and persist MoviePersonnal
-                MoviePersonnel moviePersonnel = new MoviePersonnel(movie, managedPersonnel);
-                em.persist(moviePersonnel);
+//                MoviePersonnel moviePersonnel = new MoviePersonnel(movie, managedPersonnel);
+//                em.persist(moviePersonnel);
             }
             em.getTransaction().commit();
         } catch (Exception e)

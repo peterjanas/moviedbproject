@@ -27,8 +27,8 @@ public class Movie
     private double popularity;
     private LocalDate releaseDate;
     private double rating;
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST)
-    private Set<MoviePersonnel> moviePersonnel = new HashSet<>();
+    @ManyToMany(mappedBy = "movieList", cascade = CascadeType.PERSIST)
+    private Set<Personnel> personnelList = new HashSet<>();
 
     @ManyToMany(mappedBy = "movieList", cascade = CascadeType.PERSIST)
     private Set<Genre> genreList = new HashSet<>();
@@ -42,8 +42,14 @@ public class Movie
         genre.getMovieList().add(this);
     }
 
+    public void addPersonnel(Personnel personnel)
+    {
+        personnelList.add(personnel);
+        personnel.getMovieList().add(this);
+    }
 
-    public Movie(String title, String overview, String originalLanguage, LocalDate releaseDate, double rating, double popularity, Set<MoviePersonnel> moviePersonnel)
+
+    public Movie(String title, String overview, String originalLanguage, LocalDate releaseDate, double rating, double popularity, Set<Personnel> personnelList)
     {
         this.title = title;
         this.overview = overview;
@@ -51,7 +57,7 @@ public class Movie
         this.releaseDate = releaseDate;
         this.rating = rating;
         this.popularity = popularity;
-        this.moviePersonnel = moviePersonnel;
+        this.personnelList = personnelList;
     }
 
     public Movie(Long id, String title, String overview, String originalLanguage, LocalDate releaseDate, double rating)
