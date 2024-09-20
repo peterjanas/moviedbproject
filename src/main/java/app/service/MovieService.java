@@ -48,7 +48,7 @@ public class MovieService
         {
             String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY +
                     "&with_origin_country=DK&primary_release_date.gte=" +
-                    monthsAgo + "&primary_release_date.lte=" + LocalDate.now() +
+                    fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() +
                     "&sort_by=popularity.desc&page=" + page;
 
             HttpResponse<String> response = client.send(HttpRequest.newBuilder()
