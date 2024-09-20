@@ -4,6 +4,7 @@ import app.dao.PersonnelDAO;
 
 import app.dto.PersonnelDTO;
 import app.entity.Movie;
+import app.entity.MoviePersonnel;
 import app.entity.Personnel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,39 +20,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class PersonnelService
 {
     private static final String API_KEY = System.getenv("api_key");
     private PersonnelDAO personnelDAO;
 
-    public PersonnelService(PersonnelDAO personnelDAO) {
+    public PersonnelService(PersonnelDAO personnelDAO)
+    {
         this.personnelDAO = personnelDAO;
     }
 
-    public void fetchAndSaveCastAndCrew(Long movieId) throws IOException, InterruptedException {
+
+    public void fetchAndSaveCastAndCrew(Long movieId) throws IOException, InterruptedException
+    {
         String url = "https://api.themoviedb.org/3/movie/" + movieId + "/credits?api_key=" + API_KEY;
-                      //https://api.themoviedb.org/3/movie/139/credits?api_key=dde2919024bba45ec01ad23775425c1d&language=en-US
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET()
-                .build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(response.body());
 
-        List<Personnel> personnelList = new ArrayList<>();
-        personnelList.addAll(extractPersonnel(rootNode, "cast"));
+        List<Personnel> personnelList = extractPersonnel(rootNode, "cast");
         personnelList.addAll(extractPersonnel(rootNode, "crew"));
-        personnelDAO.savePersonnel(personnelList);
+
+        // Call DAO to save personnel and link them to the movie
+        personnelDAO.savePersonnelAndLinkToMovie(personnelList, movieId);
     }
 
-    private List<Personnel> extractPersonnel(JsonNode rootNode, String roleType) {
+    private List<Personnel> extractPersonnel(JsonNode rootNode, String roleType)
+    {
         List<Personnel> personnelList = new ArrayList<>();
         JsonNode nodes = rootNode.path(roleType);
 
-        for (JsonNode node : nodes) {
+        for (JsonNode node : nodes)
+        {
             Personnel personnel = new Personnel();
             personnel.setId(node.path("id").asLong());
             personnel.setName(node.path("name").asText());

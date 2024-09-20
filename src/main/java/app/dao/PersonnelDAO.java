@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.entity.Movie;
+import app.entity.MoviePersonnel;
 import app.entity.Personnel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -167,6 +168,30 @@ public class PersonnelDAO implements IDAO<Personnel>
                 System.out.println("Personnel not found");
                 em.getTransaction().rollback();
             }
+        }
+    }
+    public void savePersonnelAndLinkToMovie(List<Personnel> personnelList, Long movieId) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Movie movie = em.find(Movie.class, movieId); // Fetch the movie inside the transaction
+
+            for (Personnel personnel : personnelList) {
+                // Merge the personnel to ensure it's managed and up to date
+                Personnel managedPersonnel = em.merge(personnel);
+
+                // Create and persist the relationship
+                MoviePersonnel moviePersonnel = new MoviePersonnel(movie, managedPersonnel);
+                em.persist(moviePersonnel);
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Transaction failed: " + e.getMessage(), e);
+        } finally {
+            em.close();
         }
     }
 }

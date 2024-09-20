@@ -30,7 +30,8 @@ public class Main
 
 
 
-        //movieDAO.printActorsInMovie(1085218L); // test til at find actors i en film
+        //movieDAO.printActorsInMovie(1L); // test til at find actors i en film
+        movieDAO.printMovieAndActors(833339L);
 
 
 

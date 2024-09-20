@@ -11,6 +11,7 @@ import jakarta.persistence.Query;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class MovieDAO implements IDAO<Movie>
 {
 
     private EntityManagerFactory emf;
+
 
     public MovieDAO(EntityManagerFactory emf)
     {
@@ -261,22 +263,38 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public List<Personnel> findActorsByMovieId(Long movieId) {
-        try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT mp.personnel FROM MoviePersonnel mp WHERE mp.movie.id = :movieId AND mp.personnel.roleType = 'cast'", Personnel.class)
-                    .setParameter("movieId", movieId)
-                    .getResultList();
-        }
-    }
+    public void printMovieAndActors(Long movieId) {
+        String sql = "SELECT m.title, m.overview, m.releasedate, m.rating, p.name, p.roletype " +
+                "FROM movie m " +
+                "JOIN moviepersonnel mp ON m.id = mp.movie_id " +
+                "JOIN personnel p ON mp.personnel_id = p.id " +
+                "WHERE m.id = ? AND p.roletype = 'cast'";
 
-    public void printActorsInMovie(Long movieId) {
-        List<Personnel> actors = findActorsByMovieId(movieId);
-        System.out.println("Actors in Movie ID " + movieId + ":");
-        for (Personnel actor : actors) {
-            System.out.println("Actor ID: " + actor.getId() + ", Name: " + actor.getName());
-        }
-        if (actors.isEmpty()) {
-            System.out.println("No actors found for Movie ID " + movieId);
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/moviedb", "postgres", "postgres");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setLong(1, movieId);
+            ResultSet rs = pstmt.executeQuery();
+
+            boolean hasData = false;
+            while (rs.next()) {
+                if (!hasData) {
+                    System.out.println("Movie: " + rs.getString("title"));
+                    System.out.println("Overview: " + rs.getString("overview"));
+                    System.out.println("Release Date: " + rs.getDate("releasedate"));
+                    System.out.println("Rating: " + rs.getDouble("rating"));
+                    System.out.println("Cast:");
+                    hasData = true;
+                }
+                System.out.println(rs.getString("name") + " - " + rs.getString("roletype"));
+            }
+
+            if (!hasData) {
+                System.out.println("No actors found or movie does not exist for ID: " + movieId);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error fetching movie and actors: " + e.getMessage());
         }
     }
 
