@@ -35,12 +35,15 @@ public class Main
 
 
 
-        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
+//        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
 
+//        genreDAO.getGenres().forEach(System.out::println); // method to print all genres in the database.
 
-        //movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
-        //movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
+//        genreDAO.printMoviesByAGenre(10402L);// method to print all movies in a genre.
 
-        //System.out.println(genreService.getGenres());
+//        movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
+//        movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
+
+//        System.out.println(genreService.getGenres());
     }
 }
