@@ -21,7 +21,6 @@ public class GenreService
 {
     private static final String API_KEY = System.getenv("api_key");
 
-
     public List<GenreDTO> getGenresToDB() throws IOException, InterruptedException, URISyntaxException
     {
         HttpClient client = HttpClient.newHttpClient();

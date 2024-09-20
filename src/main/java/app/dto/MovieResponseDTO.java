@@ -39,7 +39,6 @@ public class MovieResponseDTO
         this.results = results;
     }
 
-
     public List<MovieDTO> getMovies()
     {
         return results;

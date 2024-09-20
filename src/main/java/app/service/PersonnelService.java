@@ -31,7 +31,6 @@ public class PersonnelService
         this.personnelDAO = personnelDAO;
     }
 
-
     public void fetchAndSaveCastAndCrew(Long movieId) throws IOException, InterruptedException
     {
         String url = "https://api.themoviedb.org/3/movie/" + movieId + "/credits?api_key=" + API_KEY;

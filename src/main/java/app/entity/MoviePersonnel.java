@@ -16,11 +16,11 @@ public class MoviePersonnel
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id") //måske
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
     @ManyToOne
-    @JoinColumn(name = "personnel_id") //måske
+    @JoinColumn(name = "personnel_id")
     private Personnel personnel;
 
     public MoviePersonnel(Movie movie, Personnel personnel)

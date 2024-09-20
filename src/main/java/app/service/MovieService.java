@@ -24,7 +24,6 @@ public class MovieService
     private static final String API_KEY = System.getenv("api_key");
     private static final String BASE_URL_DISCOVER = "https://api.themoviedb.org/3/discover/movie";
     private final MovieDAO movieDAO;
-    private Map<Integer, String> genreMap = new HashMap<>();
     private PersonnelService personnelService;
 
 
@@ -36,7 +35,8 @@ public class MovieService
 
     public void fetchAndSaveAllMoviesAndPersonnel() throws IOException, InterruptedException
     {
-        LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
+        //LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
+        LocalDate monthsAgo = LocalDate.now().minusMonths(5);
         int page = 1;
         int totalPages;
 
@@ -48,7 +48,7 @@ public class MovieService
         {
             String url = BASE_URL_DISCOVER + "?api_key=" + API_KEY +
                     "&with_origin_country=DK&primary_release_date.gte=" +
-                    fiveYearsAgo + "&primary_release_date.lte=" + LocalDate.now() +
+                    monthsAgo + "&primary_release_date.lte=" + LocalDate.now() +
                     "&sort_by=popularity.desc&page=" + page;
 
             HttpResponse<String> response = client.send(HttpRequest.newBuilder()

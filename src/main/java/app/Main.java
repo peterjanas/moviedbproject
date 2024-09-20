@@ -26,36 +26,19 @@ public class Main
         PersonnelDAO personnelDAO = new PersonnelDAO(emf);
         PersonnelService personnelService = new PersonnelService(personnelDAO);
         MovieService movieService = new MovieService(movieDAO, personnelService);
-
-
-//
-//
-//        System.out.println(personnelService.getPersonnel(533535));
-//        System.out.println(personnelService.getPersonnel(990691));
-//
-//
-
         GenreDAO genreDAO = new GenreDAO(emf);
         GenreService genreService = new GenreService();
+
         List<GenreDTO> genreDTOList = genreService.getGenresToDB();
+
         genreDAO.saveGenresToDB(genreDTOList);
 
-        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies
-//        personnelService.fetchAndSaveCastAndCrew(833339L);
+        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
 
 
+        //movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
+        //movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
 
-
-
-        //movieDAO.printMoviesByActor(2361843L);
-        //movieDAO.printActorsInMovie(833339L);
-
-
-//        System.out.println(genreService.getGenres());
-
-
-
-
-
+        //System.out.println(genreService.getGenres());
     }
 }

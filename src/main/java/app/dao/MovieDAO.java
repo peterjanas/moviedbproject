@@ -106,8 +106,10 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public void updateMovie(Long movieId, String newTitle, Double newRating, LocalDate newReleaseDate) {
-        try (EntityManager em = emf.createEntityManager()) {
+    public void updateMovie(Long movieId, String newTitle, Double newRating, LocalDate newReleaseDate)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // Get movie where id is the same as the parameter id
@@ -118,7 +120,8 @@ public class MovieDAO implements IDAO<Movie>
             Movie movie = verifyIdQuery.getSingleResult();
 
             // If the movie exists, update the attributes
-            if (movie != null) {
+            if (movie != null)
+            {
                 Query updateQuery = em.createQuery("UPDATE Movie m SET m.title = :title, m.rating = :rating, m.releaseDate = :releaseDate WHERE m.id = :id");
                 updateQuery.setParameter("title", newTitle);
                 updateQuery.setParameter("rating", newRating);
@@ -242,22 +245,22 @@ public class MovieDAO implements IDAO<Movie>
     }
 
     public List<Movie> getTop10LowestRatedMovies()
-{
-    Set<Movie> movies = getAll();
-    Iterator<Movie> iterator = movies.iterator();
-    while (iterator.hasNext())
     {
-        Movie m = iterator.next();
-        if (m.getRating() == 0.0)
+        Set<Movie> movies = getAll();
+        Iterator<Movie> iterator = movies.iterator();
+        while (iterator.hasNext())
         {
-            iterator.remove();
+            Movie m = iterator.next();
+            if (m.getRating() == 0.0)
+            {
+                iterator.remove();
+            }
         }
+        return movies.stream()
+                .sorted((movie1, movie2) -> Double.compare(movie1.getRating(), movie2.getRating()))
+                .limit(10)
+                .collect(Collectors.toList());
     }
-    return movies.stream()
-            .sorted((movie1, movie2) -> Double.compare(movie1.getRating(), movie2.getRating()))
-            .limit(10)
-            .collect(Collectors.toList());
-}
 
     public List<Movie> getTop10PopularMovies()
     {
@@ -318,23 +321,17 @@ public class MovieDAO implements IDAO<Movie>
         }
     }
 
-    public void saveMoviesToDb(List<MovieDTO> movieDTOList)
+    public void printMoviesByActor(Long actorId)
     {
-        try (EntityManager em = emf.createEntityManager())
+        List<Movie> movies = findMoviesByActorId(actorId);
+        System.out.println("Movies featuring Actor ID " + actorId + ":");
+        for (Movie movie : movies)
         {
-            em.getTransaction().begin();
-            for (MovieDTO movieDTO : movieDTOList)
-            {
-                Movie movie = new Movie();
-                movie.setTitle(movieDTO.getTitle());
-                movie.setOverview(movieDTO.getOverview());
-                movie.setReleaseDate(movieDTO.getReleaseDate());
-                movie.setRating(movieDTO.getRating());
-                movie.setOriginalLanguage(movieDTO.getOriginalLanguage());
-                movie.setPopularity(movieDTO.getPopularity());
-                em.persist(movie);
-            }
-            em.getTransaction().commit();
+            System.out.println("Movie ID: " + movie.getId() + ", Title: " + movie.getTitle());
+        }
+        if (movies.isEmpty())
+        {
+            System.out.println("No movies found featuring Actor ID " + actorId);
         }
     }
 }

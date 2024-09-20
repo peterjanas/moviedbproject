@@ -43,7 +43,7 @@ public class Movie
     }
 
 
-    public Movie(String title, String overview, String originalLanguage, LocalDate releaseDate, double rating, double popularity  ,Set<MoviePersonnel> moviePersonnel)
+    public Movie(String title, String overview, String originalLanguage, LocalDate releaseDate, double rating, double popularity, Set<MoviePersonnel> moviePersonnel)
     {
         this.title = title;
         this.overview = overview;
@@ -83,7 +83,8 @@ public class Movie
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "Movie{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
