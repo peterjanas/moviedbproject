@@ -29,17 +29,14 @@ public class Main
         GenreDAO genreDAO = new GenreDAO(emf);
         GenreService genreService = new GenreService(genreDAO);
 
-        genreService.getGenresToDB();
 
 
+        //genreService.getGenresToDB();
+        //movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
 
 
-
-        movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
-
-
-        //movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
-        //movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
+        movieDAO.printMoviesByActor(4662258L); //method to find all movies an actor has been in.
+        movieDAO.printActorsInMovie(1276696L); // method to find all actors in a movie.
 
         //System.out.println(genreService.getGenres());
     }

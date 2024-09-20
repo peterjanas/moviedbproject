@@ -170,32 +170,24 @@ public class PersonnelDAO implements IDAO<Personnel>
         }
     }
 
-    public void savePersonnelAndLinkToMovie(List<Personnel> personnelList, Long movieId)
-    {
+
+    public void savePersonnelAndLinkToMovie(List<Personnel> personnelList, Long movieId) {
         EntityManager em = emf.createEntityManager();
-        try
-        {
+        try {
             em.getTransaction().begin();
             Movie movie = em.find(Movie.class, movieId);
-
-            for (Personnel personnel : personnelList)
-            {
-                Personnel managedPersonnel = em.merge(personnel);
-
-                // Create and persist MoviePersonnal
-//                MoviePersonnel moviePersonnel = new MoviePersonnel(movie, managedPersonnel);
-//                em.persist(moviePersonnel);
+            for (Personnel personnel : personnelList) {
+                Personnel managedPersonnel = em.merge(personnel); // Ensure personnel is managed
+                movie.addPersonnel(managedPersonnel); // Link personnel to movie
+                em.persist(movie); // Persist changes
             }
             em.getTransaction().commit();
-        } catch (Exception e)
-        {
-            if (em.getTransaction().isActive())
-            {
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
             throw new RuntimeException("Transaction failed: " + e.getMessage(), e);
-        } finally
-        {
+        } finally {
             em.close();
         }
     }

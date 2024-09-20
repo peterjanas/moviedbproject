@@ -27,7 +27,12 @@ public class Movie
     private double popularity;
     private LocalDate releaseDate;
     private double rating;
-    @ManyToMany(mappedBy = "movieList", cascade = CascadeType.PERSIST)
+    @ManyToMany
+    @JoinTable(
+            name = "personnel_movie",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "personnel_id")
+    )
     private Set<Personnel> personnelList = new HashSet<>();
 
     @ManyToMany(mappedBy = "movieList", cascade = CascadeType.PERSIST)
@@ -35,6 +40,9 @@ public class Movie
 
     @Transient
     List<Integer> genreIds = new ArrayList<>();
+
+    @Transient
+    List<Integer> personnalIds = new ArrayList<>();
 
     public void addGenre(Genre genre)
     {
@@ -45,7 +53,7 @@ public class Movie
     public void addPersonnel(Personnel personnel)
     {
         personnelList.add(personnel);
-        personnel.getMovieList().add(this);
+        personnel.getMovies().add(this);
     }
 
 
@@ -100,4 +108,6 @@ public class Movie
                 ", rating=" + rating +
                 '}';
     }
+
+
 }
