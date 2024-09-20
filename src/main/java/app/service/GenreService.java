@@ -48,28 +48,5 @@ public class GenreService
         {
             System.out.println("GET request failed. Status code: " + response.statusCode());
         }
-
-    }
-
-
-    public String getGenres() throws IOException, InterruptedException, URISyntaxException
-    {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(new URI("https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY + "&language=en")).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-
-        String json = response.body();
-        ObjectMapper objectMapper = new ObjectMapper();
-        GenresResponseDTO genresResponse = objectMapper.readValue(json, GenresResponseDTO.class);
-
-        StringBuilder output = new StringBuilder();
-        for (GenreDTO genre : genresResponse.getGenres())
-        {
-            output
-                    .append("Genre ID: ").append(genre.getId())
-                    .append(", Genre Name: ").append(genre.getName()).append("\n");
-        }
-        return output.toString();
     }
 }

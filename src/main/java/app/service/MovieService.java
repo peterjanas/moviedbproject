@@ -35,8 +35,8 @@ public class MovieService
 
     public void fetchAndSaveAllMoviesAndPersonnel() throws IOException, InterruptedException
     {
-        //LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
-        LocalDate monthsAgo = LocalDate.now().minusMonths(5);
+        LocalDate fiveYearsAgo = LocalDate.now().minusYears(5);
+        //LocalDate monthsAgo = LocalDate.now().minusMonths(5); For testing purposes
         int page = 1;
         int totalPages;
 
