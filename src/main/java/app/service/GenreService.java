@@ -1,5 +1,6 @@
 package app.service;
 
+import app.dao.GenreDAO;
 import app.dto.GenreDTO;
 import app.dto.GenresResponseDTO;
 import app.dto.MovieDTO;
@@ -20,8 +21,14 @@ import java.util.List;
 public class GenreService
 {
     private static final String API_KEY = System.getenv("api_key");
+    private GenreDAO genreDAO;
 
-    public List<GenreDTO> getGenresToDB() throws IOException, InterruptedException, URISyntaxException
+    public GenreService(GenreDAO genreDAO)
+    {
+        this.genreDAO = genreDAO;
+    }
+
+    public void getGenresToDB() throws IOException, InterruptedException, URISyntaxException
     {
         HttpClient client = HttpClient.newHttpClient();
         List<GenreDTO> genreList = new ArrayList<>();
@@ -35,11 +42,13 @@ public class GenreService
             GenresResponseDTO genresResponse = objectMapper.readValue(json, GenresResponseDTO.class);
 
             genreList.addAll(genresResponse.getGenres());
+            genreDAO.saveGenresToDB(genreList);
+
         } else
         {
             System.out.println("GET request failed. Status code: " + response.statusCode());
         }
-        return genreList;
+
     }
 
 

@@ -27,11 +27,13 @@ public class Main
         PersonnelService personnelService = new PersonnelService(personnelDAO);
         MovieService movieService = new MovieService(movieDAO, personnelService);
         GenreDAO genreDAO = new GenreDAO(emf);
-        GenreService genreService = new GenreService();
+        GenreService genreService = new GenreService(genreDAO);
 
-        List<GenreDTO> genreDTOList = genreService.getGenresToDB();
+        genreService.getGenresToDB();
 
-        genreDAO.saveGenresToDB(genreDTOList);
+
+
+
 
         movieService.fetchAndSaveAllMoviesAndPersonnel(); // method for fill movies and personnal to database
 
