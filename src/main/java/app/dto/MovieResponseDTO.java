@@ -2,16 +2,10 @@ package app.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -23,9 +17,7 @@ public class MovieResponseDTO
     private int totalPages;
     @JsonProperty("total_results")
     private int totalResults;
-    private List<MovieDTO> results;  // This assumes the MovieDTO matches the fields of each movie object in the JSON
-
-    // Constructors
+    private List<MovieDTO> results;
 
     public MovieResponseDTO()
     {

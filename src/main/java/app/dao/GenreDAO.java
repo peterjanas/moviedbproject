@@ -51,7 +51,7 @@ public class GenreDAO
             // Initialize genreList to avoid LazyInitializationException
             for (Movie movie : movies)
             {
-                movie.getGenreList().size(); // Access the genreList to initialize it
+                movie.getGenreList().size();
             }
             return movies;
         }

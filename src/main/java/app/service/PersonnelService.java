@@ -2,22 +2,18 @@ package app.service;
 
 import app.dao.PersonnelDAO;
 
-import app.dto.PersonnelDTO;
-import app.entity.Movie;
 import app.entity.Personnel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 public class PersonnelService

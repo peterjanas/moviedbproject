@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GenresResponseDTO {
+public class GenresResponseDTO
+{
     @JsonProperty("genres")
     private List<GenreDTO> genres;
 }

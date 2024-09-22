@@ -3,10 +3,7 @@ package app.service;
 import app.dao.GenreDAO;
 import app.dto.GenreDTO;
 import app.dto.GenresResponseDTO;
-import app.dto.MovieDTO;
-import app.dto.MovieResponseDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.net.URI;
