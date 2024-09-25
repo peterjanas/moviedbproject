@@ -39,7 +39,16 @@ public class MovieDAOTests {
     }
 
     @AfterEach
-    public void tearDown() {
+    public void tearDownEach() {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            em.createQuery("DELETE FROM Movie").executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
+
+    @AfterAll
+    public static void tearDown() {
         if (emf != null) {
             emf.close();
         }
